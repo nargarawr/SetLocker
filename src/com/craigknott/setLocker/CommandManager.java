@@ -61,20 +61,39 @@ public class CommandManager implements CommandExecutor {
 			return true;
 		}
 
-		if ( args.length == 0 ){
+		if (args.length == 0) {
 			sendError(sender, "Too few arguments");
 			return true;
 		}
-		
+
+		boolean flag = false;
+		if (args.length == 1) {
+			flag = true;
+		}
+
 		switch (args[0]) {
 		case ("createRegion"):
-			createRegion(sender, args[1]);
+			if (flag) {
+				sendError(sender, "Missing name argument");
+			} else {
+				createRegion(sender, args[1]);
+			}
 			break;
 		case ("acquire"):
-			acquireLock(sender,args[1]);
+			if (flag) {
+				
+					sendError(sender, "Missing name argument");
+				
+			} else {
+				acquireLock(sender, args[1]);
+			}
 			break;
 		case ("release"):
-			releaseLock(sender,args[1]);
+			if (flag) {
+				sendError(sender, "Missing name argument");
+			} else {
+				releaseLock(sender, args[1]);
+			}
 			break;
 		case ("list"):
 			lockList(sender);
@@ -88,66 +107,56 @@ public class CommandManager implements CommandExecutor {
 
 		return true;
 	}
-	
-	public boolean acquireLock ( CommandSender sender, String name ){
-		if ( name == null ){
-			sendError(sender, "Missing name argument");
-			return true;
-		}
-		
+
+	public boolean acquireLock(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
-		
-		if ( l != null ){
+
+		if (l != null) {
 			sender.sendMessage(l.acquireLock(name));
 		}
 		return true;
 	}
-	
-	
-	public boolean releaseLock ( CommandSender sender, String name ){
-		if ( name == null ){
-			sendError(sender, "Missing name argument");
-			return true;
-		}
-		
+
+	public boolean releaseLock(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
-		
-		if ( l != null ){
-			if ( (l.getWarden().equals(((Player) sender).getName()))) {
-				sender.sendMessage(l.releaseLock());	
+
+		if (l != null) {
+			if ((l.getWarden().equals(((Player) sender).getName()))) {
+				sender.sendMessage(l.releaseLock());
 			} else {
-				sendError(sender, "You are not the holder of this lock, and cannot release it");
+				sendError(sender,
+						"You are not the holder of this lock, and cannot release it");
 			}
 		} else {
 			sendError(sender, "No such region exists");
 		}
-		
+
 		return true;
 	}
 
-	public boolean unique ( String name ) {
-		for ( Lock l : lockManager.getLocks() ){
-			if (l.getRegion().getName().equals(name)){
+	public boolean unique(String name) {
+		for (Lock l : lockManager.getLocks()) {
+			if (l.getRegion().getName().equals(name)) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	public boolean createRegion ( CommandSender sender, String name ) {
+
+	public boolean createRegion(CommandSender sender, String name) {
 		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
 				.getPluginManager().getPlugin("WorldEdit");
 		Selection selection = worldEdit.getSelection((Player) sender);
 
 		if (selection != null) {
-			if ( unique ( name.toString() ) ) {
+			if (unique(name.toString())) {
 				RegionNamePair r = new RegionNamePair(name.toString(),
 						selection);
 				Lock l = new Lock(r);
 				lockManager.addLock(l);
-				
-				sender.sendMessage("Added sucessfully");	
+
+				sender.sendMessage("Added sucessfully");
 			} else {
 				sendError(sender, "That region name has been used already");
 			}
@@ -156,13 +165,13 @@ public class CommandManager implements CommandExecutor {
 		}
 		return true;
 	}
-	
-	public boolean lockList ( CommandSender sender ){
+
+	public boolean lockList(CommandSender sender) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("=================\n");
 		sb.append(" Current Regions\n");
 		sb.append("=================\n");
-		
+
 		for (Lock l : lockManager.getLocks()) {
 			String locked = null;
 			if (l.isLocked()) {
@@ -175,7 +184,7 @@ public class CommandManager implements CommandExecutor {
 		sender.sendMessage(sb.toString());
 		return true;
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
