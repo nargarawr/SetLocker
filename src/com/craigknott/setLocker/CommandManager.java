@@ -24,37 +24,6 @@ public class CommandManager implements CommandExecutor {
 		sender.sendMessage(ChatColor.valueOf("RED").toString().concat(message));
 	}
 
-	public boolean getCurrentSelection(CommandSender sender, String label,
-			String[] args) {
-		if (!(sender instanceof Player)) {
-			sendError(sender, "This command may only be invoked by a player");
-			return true;
-		}
-
-		if (args.length > 0) {
-			sendError(sender,
-					"Incorrect number of arguments given (expected 0, given "
-							+ args.length + ")");
-			return true;
-		}
-
-		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
-				.getPluginManager().getPlugin("WorldEdit");
-		Selection selection = worldEdit.getSelection((Player) sender);
-
-		if (selection != null) {
-			sender.sendMessage("X1 " + selection.getMaximumPoint().getBlockX()
-					+ " Y1 " + selection.getMaximumPoint().getBlockY() + " Z1 "
-					+ selection.getMaximumPoint().getBlockZ() + "\n" + "X2 "
-					+ selection.getMinimumPoint().getBlockX() + " Y2 "
-					+ selection.getMinimumPoint().getBlockY() + " Z2 "
-					+ selection.getMinimumPoint().getBlockZ());
-		} else {
-			sendError(sender, "No selection has been made");
-		}
-		return true;
-	}
-
 	public boolean lock(CommandSender sender, String label, String[] args) {
 		if (!(sender instanceof Player)) {
 			sendError(sender, "This command may only be invoked by a player");
@@ -66,40 +35,48 @@ public class CommandManager implements CommandExecutor {
 			return true;
 		}
 
-		boolean flag = false;
-		if (args.length == 1) {
-			flag = true;
-		}
-
 		switch (args[0]) {
 		case ("createRegion"):
-			if (flag) {
+			if (args.length == 1) {
 				sendError(sender, "Missing name argument");
 			} else {
 				createRegion(sender, args[1]);
 			}
 			break;
 		case ("deleteRegion"):
-			if (flag) {
+			if (args.length == 1) {
 				sendError(sender, "Missing name argument");
 			} else {
 				deleteRegion(sender, args[1]);
 			}
 			break;
 		case ("acquire"):
-			if (flag) {
-				
-					sendError(sender, "Missing name argument");
-				
+			if (args.length == 1) {
+				sendError(sender, "Missing name argument");
 			} else {
 				acquireLock(sender, args[1]);
 			}
 			break;
 		case ("release"):
-			if (flag) {
+			if (args.length == 1) {
 				sendError(sender, "Missing name argument");
 			} else {
 				releaseLock(sender, args[1]);
+			}
+			break;
+		case ("regionInfo"):
+			if (args.length == 1) {
+				sendError(sender, "Missing region argument (/lock info <region>)");
+			} else {
+				regionInfo(sender,args[1]);
+			}
+		case ("addPlayer"):
+			if (args.length == 1) {
+				sendError(sender, "Missing region argument (/lock addPlayer <region> <username>)");
+			} else if (args.length == 2) {
+				sendError(sender, "Missing player argument (/lock addPlayer <region> <username>)");
+			} else {
+				addPlayer(sender, args[1], args[2]);
 			}
 			break;
 		case ("list"):
@@ -115,6 +92,42 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
+	public boolean regionInfo ( CommandSender sender, String name ){
+		Lock l = lockManager.getLockByName(name);
+
+		if (l != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Region: " + name + "\n");
+			sb.append("Locked?: " + l.isLocked() + "\n");
+			if ( l.isLocked() ){
+				sb.append("Owner: " + l.getWarden() + "\n");
+				for ( String s : l.getCellMates() ){
+					if ( !(s.equals(l.getWarden()))) {
+						sb.append("Crew: " + s + "\n");
+					}
+				}
+				
+			}
+			sender.sendMessage(sb.toString());
+			
+		} else {
+			sendError(sender,"That region does not exist");
+		}
+		return true;
+		
+	}
+	
+	public boolean addPlayer ( CommandSender sender, String name, String player){
+		Lock l = lockManager.getLockByName(name);
+
+		if (l != null) {
+			sender.sendMessage(l.addCellMates(player));
+		} else {
+			sendError(sender,"That region does not exist");
+		}
+		return true;
+	}
+	
 	public boolean acquireLock(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 
@@ -153,7 +166,11 @@ public class CommandManager implements CommandExecutor {
 
 	public boolean deleteRegion(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
-		sender.sendMessage(lockManager.delete(l));
+		if (l != null) {
+			sender.sendMessage(lockManager.delete(l));
+		} else {
+			sendError(sender, "Region does not exist");
+		}
 		return true;
 	}
 	
@@ -201,11 +218,6 @@ public class CommandManager implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-
-		if (cmd.getName().equalsIgnoreCase("getCurrentSelection")) {
-			return getCurrentSelection(sender, label, args);
-		}
-
 		if (cmd.getName().equalsIgnoreCase("lock")) {
 			return lock(sender, label, args);
 		}
