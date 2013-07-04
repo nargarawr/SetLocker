@@ -141,10 +141,15 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			sender.sendMessage(l.addCellMates(player));
+			if (l.getWarden().equals(((Player) sender).getName())) {
+				sender.sendMessage(l.addCellMates(player));
+			} else {
+				sendError(sender, "You are not the owner of this region");
+			}
 		} else {
 			sendError(sender, "That region does not exist");
 		}
+
 		return true;
 	}
 
@@ -179,17 +184,10 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if (l.getWarden().equals(((Player) sender).getName())) {
-				if (l.acquireLock(((Player) sender).getName())) {
-					sender.sendMessage("Sucessfully Locked");
-				} else {
-					sendError(sender,
-							"This region is already locked and cannot be acquired");
-				}
-			} else {
-				sendError(sender, "You are not the owner of this region");
-			}
-
+			sender.sendMessage("Sucessfully Locked");
+		} else {
+			sendError(sender,
+					"This region is already locked and cannot be acquired");
 		}
 		return true;
 	}
