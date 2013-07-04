@@ -41,7 +41,7 @@ public class CommandManager implements CommandExecutor {
 		switch (args[0]) {
 		case ("createRegion"):
 			if (args.length == 1) {
-				sendError(sender, "Missing region argument (/lock createRegion <region>)");
+				sendError(sender, "Missing region argument (/lock createRegion <name>)");
 			} else {
 				createRegion(sender, args[1]);
 			}
@@ -121,14 +121,6 @@ public class CommandManager implements CommandExecutor {
 			break;
 		case ("about"):
 			displayAbout(sender);
-			break;
-		case("warpTo"):
-			if (args.length == 1) {
-				sendError(sender,
-						"Missing region argument (/lock warpTo <region>)");
-			} else {
-				leaveRegion(sender, args[1]);
-			}
 			break;
 		default:
 			sendError(

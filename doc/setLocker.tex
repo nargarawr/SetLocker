@@ -1,5 +1,5 @@
 \documentclass[a4paper,twoside,notitlepage,11pt]{article}
-\usepackage[a4paper,hmargin=50pt,vmargin=75pt]{geometry}
+\usepackage[a4paper,hmargin=50pt,vmargin=50pt]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{amstext}
@@ -41,11 +41,11 @@ SetLocker is a simple server plugin I was commissioned to create that allows for
 \section{\textbackslash lock [action] [p1] [p2]}
 \begin{itemize}
 \item \textbackslash lock createRegion [name] NULL\\
-After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind that region to a specific name, [name], and grants it a lock.
-\item \textbackslash lock acquire [name] NULL\\
-Acquires a lock on the region [name]. Can only be achieved if the region is not already locked
-\item \textbackslash lock release [name] NULL\\
-Releases the lock on the region [name]. Can only be achieved if the player is the owner of the lock
+After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind a region to a specific name, [name], and grants it a lock.
+\item \textbackslash lock acquire [region] NULL\\
+Acquires a lock on the region [region]. Can only be achieved if the region is not already locked
+\item \textbackslash lock release [region] NULL\\
+Releases the lock on the region [region]. Can only be achieved if the player is the owner of the lock
 \item \textbackslash lock list NULL NULL\\
 Lists all regions and their locked status. If locked, the owner of the locker will be identified.
 \item \textbackslash lock regionInfo [region] NULL\\
