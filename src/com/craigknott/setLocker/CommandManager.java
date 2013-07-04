@@ -72,6 +72,8 @@ public class CommandManager implements CommandExecutor {
 						selection);
 				Lock l = new Lock(r);
 				lockManager.addLock(l);
+				
+				sender.sendMessage("Added sucessfully");
 			} else {
 				sendError(sender, "No selection has been made");
 			}
