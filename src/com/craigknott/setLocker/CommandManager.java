@@ -143,9 +143,9 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(region);
 
 		if (l != null) {
-			if (l.isLocked() && (l.getWarden().equals(((Player) sender).getName()))){
+			if (l.isLocked() && (l.getWarden().equalsIgnoreCase(((Player) sender).getName()))){
 				l.swapOwner(newOwner);
-			} else if (l.isLocked() && (!(l.getWarden().equals(((Player) sender).getName())))){
+			} else if (l.isLocked() && (!(l.getWarden().equalsIgnoreCase(((Player) sender).getName())))){
 				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
@@ -171,7 +171,7 @@ public class CommandManager implements CommandExecutor {
 				}
 
 				for (String s : l.getCellMates()) {
-					if (!(s.equals(l.getWarden()))) {
+					if (!(s.equalsIgnoreCase(l.getWarden()))) {
 						sb.append(s + ", ");
 					}
 				}
@@ -190,9 +190,9 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if (l.isLocked() && (l.getWarden().equals(((Player) sender).getName()))){
+			if (l.isLocked() && (l.getWarden().equalsIgnoreCase(((Player) sender).getName()))){
 				sender.sendMessage(l.addCellMates(player));
-			} else if (l.isLocked() && (!(l.getWarden().equals(((Player) sender).getName())))){
+			} else if (l.isLocked() && (!(l.getWarden().equalsIgnoreCase(((Player) sender).getName())))){
 				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
@@ -210,11 +210,11 @@ public class CommandManager implements CommandExecutor {
 		boolean notFound = true;
 
 		if (l != null) {
-			if (l.isLocked() && (l.getWarden().equals(((Player) sender).getName()))){
+			if (l.isLocked() && (l.getWarden().equalsIgnoreCase(((Player) sender).getName()))){
 				for (String s : l.getCellMates()) {
-					if (s.equals(player)) {
+					if (s.equalsIgnoreCase(player)) {
 						l.removeCellMate(player);
-						if ( player.equals(l.getWarden() )) {
+						if ( player.equalsIgnoreCase(l.getWarden() )) {
 							l.releaseLock();
 							sender.sendMessage("Sucessfully removed, and lock released");
 						} else {
@@ -227,7 +227,7 @@ public class CommandManager implements CommandExecutor {
 					sendError(sender,
 							"That player does not belong to this region");
 				}
-			} else if (l.isLocked() && (!(l.getWarden().equals(((Player) sender).getName())))){
+			} else if (l.isLocked() && (!(l.getWarden().equalsIgnoreCase(((Player) sender).getName())))){
 				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
@@ -245,9 +245,9 @@ public class CommandManager implements CommandExecutor {
 
 		if (l != null) {
 			for (String s : l.getCellMates()) {
-				if (s.equals(((Player) sender).getName())) {
+				if (s.equalsIgnoreCase(((Player) sender).getName())) {
 					l.removeCellMate(((Player) sender).getName());
-					if (((Player) sender).getName().equals(l.getWarden())){
+					if (((Player) sender).getName().equalsIgnoreCase(l.getWarden())){
 						l.releaseLock();
 						sender.sendMessage("Sucessfully left, lock released");
 					} else {
@@ -283,7 +283,7 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if ((l.getWarden().equals(((Player) sender).getName()))) {
+			if ((l.getWarden().equalsIgnoreCase(((Player) sender).getName()))) {
 				sender.sendMessage(l.releaseLock());
 			} else {
 				sendError(sender,
@@ -298,7 +298,7 @@ public class CommandManager implements CommandExecutor {
 
 	public boolean unique(String name) {
 		for (Lock l : lockManager.getLocks()) {
-			if (l.getRegion().getName().equals(name)) {
+			if (l.getRegion().getName().equalsIgnoreCase(name)) {
 				return false;
 			}
 		}
@@ -366,14 +366,14 @@ public class CommandManager implements CommandExecutor {
 		return false;
 	}
 
-	public String[] releaseOwnerships(String name){
+	public void releaseOwnerships(String name){
 		for ( Lock l : lockManager.getLocks() ){
-			if ( l.getWarden().equals(name)) {
+			if ( l.isLocked() && l.getWarden().equalsIgnoreCase(name)) {
 				if ( l.getCellMateCount() == 0 ){
 					l.releaseLock();
 				} else {
 					String newOwner = name;
-					while ( newOwner.equals(name) ){
+					while ( newOwner.equalsIgnoreCase(name) ){
 						Random r = new Random();
 						int x = r.nextInt() % l.getCellMateCount() + 1; 
 						newOwner = l.getCellMateByIndex(x);
@@ -383,9 +383,6 @@ public class CommandManager implements CommandExecutor {
 			}
 			
 		}
-		
-		return null;
-		
 	}
 	
 }
