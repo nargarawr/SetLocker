@@ -97,10 +97,18 @@ public class CommandManager implements CommandExecutor {
 		case ("list"):
 			lockList(sender);
 			break;
+		case ("leave"):
+			if (args.length == 1) {
+				sendError(sender,
+						"Missing region argument (/lock leave <region>)");
+			} else {
+				leaveRegion(sender, args[1]);
+			}
+			break;
 		default:
 			sendError(
 					sender,
-					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, regionInfo, acquire, release or list");
+					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, acquire, release or list");
 			break;
 		}
 
@@ -174,6 +182,34 @@ public class CommandManager implements CommandExecutor {
 			} else {
 				sendError(sender, "You are not the owner of this region");
 			}
+		} else {
+			sendError(sender, "That region does not exist");
+		}
+		return true;
+	}
+
+	public boolean leaveRegion(CommandSender sender, String name) {
+		Lock l = lockManager.getLockByName(name);
+
+		boolean notFound = true;
+
+		if (l != null) {
+			for (String s : l.getCellMates()) {
+				if (s.equals(((Player) sender).getName())) {
+					l.removeCellMate(((Player) sender).getName());
+					if (((Player) sender).getName().equals(l.getWarden())){
+						l.releaseLock();
+						sender.sendMessage("Sucessfully left, lock released");
+					} else {
+						sender.sendMessage("Sucessfully left");
+					}
+					return true;
+				}
+			}
+			if (notFound) {
+				sendError(sender, "You do not belong to this region");
+			}
+
 		} else {
 			sendError(sender, "That region does not exist");
 		}
