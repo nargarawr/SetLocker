@@ -4,8 +4,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SetLocker extends JavaPlugin {
 	
-	public void onEnabled () {
+	@Override
+	public void onDisable() {
+	 
+	}
+	 
+	@Override
+	public void onEnable() {
 		getCommand("getCurrentSelection").setExecutor(new CommandManager(this));
 	}
+	 
 	
 }

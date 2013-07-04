@@ -4,6 +4,6 @@ version: 1
 commands:
    getCurrentSelection:
       description: Get's the player's current world edit selection
-      usage: /<command> [player]
+      usage: /<command>
       permission: SetLocker.getCurrentSelection
       permission-message: You don't have <permission>
