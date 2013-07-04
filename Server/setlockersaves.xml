@@ -1,23 +1,78 @@
 <lock>
-	<warden>
-	</warden>
-	<cellmates>
-	</cellmates>
-	<region>
-		<name>
-			Blue
-		</name>
-	</region>
+<warden>
+Truenash
+Truenash
+</warden>
+<cellmates>
+<cellmate>
+Truenash
+</cellmate>
+<cellmate>
+Nargarawr
+</cellmate>
+</cellmates>
+<region>
+<name>
+Blue
+</name>
+<min_point>
+<world>
+</world>
+<x>
+</x>
+<y>
+</y>
+<z>
+</z>
+</min_point>
+<max_point>
+<world>
+</world>
+<x>
+</x>
+<y>
+</y>
+<z>
+</z>
+</max_point>
+</region>
 </lock>
-
 <lock>
-	<warden>
-	</warden>
-	<cellmates>
-	</cellmates>
-	<region>
-		<name>
-		Brown
-		</name>
-	</region>
+<warden>
+Nargarawr
+Nargarawr
+</warden>
+<cellmates>
+<cellmate>
+Nargarawr
+</cellmate>
+<cellmate>
+Truenash
+</cellmate>
+</cellmates>
+<region>
+<name>
+Pink
+</name>
+<min_point>
+<world>
+</world>
+<x>
+</x>
+<y>
+</y>
+<z>
+</z>
+</min_point>
+<max_point>
+<world>
+</world>
+<x>
+</x>
+<y>
+</y>
+<z>
+</z>
+</max_point>
+</region>
 </lock>

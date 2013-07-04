@@ -177,7 +177,7 @@ public class CommandManager implements CommandExecutor {
 			StringBuilder sb = new StringBuilder();
 			sb.append("\nRegion: " + name + "\n");
 			sb.append("Locked?: " + l.isLocked() + "\n");
-			sb.append("Location:\n");
+			sb.append("Location: " + l.getRegion().getMax_point().getWorld() + "\n");
 			sb.append("(" + l.getRegion().getMax_point().getX() + ", ");
 			sb.append(l.getRegion().getMax_point().getY() + ", ");
 			sb.append(l.getRegion().getMax_point().getZ() + ")\n");
