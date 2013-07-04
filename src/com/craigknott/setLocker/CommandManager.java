@@ -97,8 +97,8 @@ public class CommandManager implements CommandExecutor {
 					locked = "(Free)\n";
 				}
 				sb.append(l.getRegion().getName() + " " + locked);
-				sender.sendMessage(sb.toString());
 			}
+			sender.sendMessage(sb.toString());
 			break;
 		default:
 			sendError(
