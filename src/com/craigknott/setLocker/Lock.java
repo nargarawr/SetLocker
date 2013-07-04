@@ -19,6 +19,10 @@ public class Lock {
 		return region;
 	}
 
+	public String getWarden () {
+		return warden;
+	}
+	
 	public boolean isLocked() {
 		return (cellMates.size() > 0 );
 	}

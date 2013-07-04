@@ -61,6 +61,11 @@ public class CommandManager implements CommandExecutor {
 			return true;
 		}
 
+		if ( args.length == 0 ){
+			sendError(sender, "Too few arguments");
+			return true;
+		}
+		
 		switch (args[0]) {
 		case ("createRegion"):
 			createRegion(sender, args[1]);
@@ -85,6 +90,11 @@ public class CommandManager implements CommandExecutor {
 	}
 	
 	public boolean acquireLock ( CommandSender sender, String name ){
+		if ( name == null ){
+			sendError(sender, "Missing name argument");
+			return true;
+		}
+		
 		Lock l = lockManager.getLockByName(name);
 		
 		if ( l != null ){
@@ -95,10 +105,19 @@ public class CommandManager implements CommandExecutor {
 	
 	
 	public boolean releaseLock ( CommandSender sender, String name ){
+		if ( name == null ){
+			sendError(sender, "Missing name argument");
+			return true;
+		}
+		
 		Lock l = lockManager.getLockByName(name);
 		
 		if ( l != null ){
-			sender.sendMessage(l.releaseLock());
+			if ( (l.getWarden().equals(((Player) sender).getName()))) {
+				sender.sendMessage(l.releaseLock());	
+			} else {
+				sendError(sender, "You are not the holder of this lock, and cannot release it");
+			}
 		} else {
 			sendError(sender, "No such region exists");
 		}
@@ -147,7 +166,7 @@ public class CommandManager implements CommandExecutor {
 		for (Lock l : lockManager.getLocks()) {
 			String locked = null;
 			if (l.isLocked()) {
-				locked = "(Locked)\n";
+				locked = "(Locked by " + l.getWarden() + ")\n";
 			} else {
 				locked = "(Free)\n";
 			}
