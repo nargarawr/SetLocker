@@ -1,1 +1,23 @@
-test
+<lock>
+	<warden>
+	</warden>
+	<cellmates>
+	</cellmates>
+	<region>
+		<name>
+			Blue
+		</name>
+	</region>
+</lock>
+
+<lock>
+	<warden>
+	</warden>
+	<cellmates>
+	</cellmates>
+	<region>
+		<name>
+		Brown
+		</name>
+	</region>
+</lock>
