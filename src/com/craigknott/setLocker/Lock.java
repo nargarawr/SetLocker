@@ -15,15 +15,15 @@ public class Lock {
 		cellMates = new ArrayList<String>();
 	}
 
-	public synchronized RegionNamePair getRegion() {
+	public RegionNamePair getRegion() {
 		return region;
 	}
 
-	public synchronized  String getWarden () {
+	public String getWarden () {
 		return warden;
 	}
 	
-	public synchronized boolean isLocked() {
+	public boolean isLocked() {
 		return (cellMates.size() > 0 );
 	}
 
@@ -43,11 +43,11 @@ public class Lock {
 			
 	} 
 	
-	public synchronized ArrayList<String> getCellMates (){
+	public ArrayList<String> getCellMates (){
 		return cellMates;
 	}
 	
-	public synchronized int getCellMateCount ( ){ 
+	public int getCellMateCount ( ){ 
 		return cellMates.size() - 1;
 	}
 	

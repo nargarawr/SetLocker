@@ -184,7 +184,7 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			l.acquireLock(name);
+			l.acquireLock(((Player) sender).getName());
 			sender.sendMessage("Sucessfully Locked");
 		} else {
 			sendError(sender,
@@ -193,7 +193,7 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public boolean releaseLock(CommandSender sender, String name) {
+	public synchronized boolean releaseLock(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
@@ -220,7 +220,7 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public boolean deleteRegion(CommandSender sender, String name) {
+	public synchronized boolean deleteRegion(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 		if (l != null) {
 			sender.sendMessage(lockManager.delete(l));
@@ -230,7 +230,7 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public boolean createRegion(CommandSender sender, String name) {
+	public synchronized boolean createRegion(CommandSender sender, String name) {
 		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
 				.getPluginManager().getPlugin("WorldEdit");
 		Selection selection = worldEdit.getSelection((Player) sender);
