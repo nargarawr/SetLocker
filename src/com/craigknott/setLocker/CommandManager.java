@@ -61,18 +61,18 @@ public class CommandManager implements CommandExecutor {
 
 		if (args.length != 2) {
 			sendError(sender,
-					"Incorrect number of arguments given (expected 0, given "
+					"Incorrect number of arguments given (expected 2, given "
 							+ args.length + ")");
 			return true;
 		}
 
 		switch (args[0]) {
-			case ("new"):
-				sender.sendMessage("new was typed");
+			case ("acquire"):
+				
 				break;
 			default:
 				sendError(sender,
-						"The first argument was invalid, please specify either: new");
+						"The first argument was invalid, please specify either: acquire, or release");
 				break;
 		}
 
@@ -87,7 +87,7 @@ public class CommandManager implements CommandExecutor {
 			return getCurrentSelection(sender, label, args);
 		}
 
-		if (cmd.getName().equalsIgnoreCase("setLock")) {
+		if (cmd.getName().equalsIgnoreCase("lock")) {
 			return setLock(sender, label, args);
 		}
 		return false;
