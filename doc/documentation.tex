@@ -1,0 +1,53 @@
+\documentclass[a4paper,twoside,notitlepage,11pt]{article}
+\usepackage[a4paper,hmargin=70pt,vmargin=75pt]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{titletoc}
+\usepackage[explicit]{titlesec}
+\usepackage{nccmath}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{automata}
+\usepackage[hypcap]{caption}
+\usepackage{cancel}
+\usepackage{cleveref}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{latexsym}
+\usepackage{enumerate}
+
+
+\newcommand{\paperTitle}{SetLocker}
+\newcommand{\nin}{\noindent}
+
+\renewcommand{\headrulewidth}{0.0pt}
+
+\begin{document}
+
+\begin{center}
+   \textbf{SetLocker\ \\Minecraft Server Plugin} \ \\
+   By Craig Knott (Nargarawr) \ \\
+   \ \\
+   Please report any bugs to psyck@nottingham.ac.uk
+\end{center}
+\ \\
+\nin
+SetLocker is a simple server plugin I was commissioned to create that allows for exclusivity within regions in Minecraft. The purpose of this plug in is to rent out public spaces to members of a server, through the use of ``locking'' and ``unlocking'' the region. Once a region is locked, only the person that acquired the lock may enter it. The owner of the locker can, however, add ``crewmen'', players whom can then also access the region. The player can, at any time, pass on ownership of the region to another crewman. Once the player is finished with the region, they may release the lock so other parties can access the region (this will happen automatically if they disconnect from the server, although ownership will pass to another crewman, if possible). Below is a list of the commands of the plugin, how to use them, and what they do.
+
+\section{\textbackslash lock [action] [p1]}
+\begin{itemize}
+\item \textbackslash lock createRegion [name]\\
+After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind that region to a specific name, [name], and grants it a lock.
+\item \textbackslash lock acquire [name]\\
+Acquires a lock on the region [name]. Can only be achieved if the region is not already locked
+\item \textbackslash lock release [name]\\
+Releases the lock on the region [name]. Can only be achieved if the player is the owner of the lock
+\item \textbackslash lock list NULL\\
+Lists all regions and their locked status. If locked, the owner of the locker will be identified.
+\end{itemize}
+
+\end{document}
