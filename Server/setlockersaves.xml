@@ -1,0 +1,21 @@
+<lock>
+ <warden>Nargarawr</warden>
+ <cellmates>
+  <cellmate>Nargarawr</cellmate>
+ </cellmates>
+ <region>
+  <name>test</name>
+  <min_point>
+   <world>CraftWorld{name=world}</world>
+   <x>20.0</x>
+   <y>78.0</y>
+   <z>248.0</z>
+  </min_point>
+  <max_point>
+   <world>CraftWorld{name=world}</world>
+   <x>20.0</x>
+   <y>78.0</y>
+   <z>248.0</z>
+  </max_point>
+ </region>
+</lock>

@@ -18,19 +18,19 @@ public class CommandManager implements CommandExecutor {
 	private SetLocker plugin;
 	private LockManager lockManager;
 
-	public SetLocker getPlugin () {
+	public SetLocker getPlugin() {
 		return plugin;
 	}
-	
+
 	public CommandManager(SetLocker plugin) {
 		this.plugin = plugin;
 		lockManager = new LockManager();
 	}
 
-	public LockManager getLockManager () {
+	public LockManager getLockManager() {
 		return lockManager;
 	}
-	
+
 	public void sendError(CommandSender sender, String message) {
 		sender.sendMessage(ChatColor.valueOf("RED").toString().concat(message));
 	}
@@ -48,9 +48,10 @@ public class CommandManager implements CommandExecutor {
 
 		switch (args[0]) {
 		case ("createRegion"):
-			if ( ((Player)sender).hasPermission("setManager") ) {
+			if (((Player) sender).hasPermission("setManager")) {
 				if (args.length == 1) {
-					sendError(sender, "Missing region argument (/lock createRegion <name>)");
+					sendError(sender,
+							"Missing region argument (/lock createRegion <name>)");
 				} else {
 					createRegion(sender, args[1]);
 				}
@@ -60,21 +61,24 @@ public class CommandManager implements CommandExecutor {
 			break;
 		case ("deleteRegion"):
 			if (args.length == 1) {
-				sendError(sender, "Missing region argument (/lock deleteRegion <region>)");
+				sendError(sender,
+						"Missing region argument (/lock deleteRegion <region>)");
 			} else {
 				deleteRegion(sender, args[1]);
 			}
 			break;
 		case ("acquire"):
 			if (args.length == 1) {
-				sendError(sender, "Missing region argument (/lock acquire <region>)");
+				sendError(sender,
+						"Missing region argument (/lock acquire <region>)");
 			} else {
 				acquireLock(sender, args[1]);
 			}
 			break;
 		case ("release"):
 			if (args.length == 1) {
-				sendError(sender, "Missing region argument (/lock release <region>)");
+				sendError(sender,
+						"Missing region argument (/lock release <region>)");
 			} else {
 				releaseLock(sender, args[1]);
 			}
@@ -359,13 +363,14 @@ public class CommandManager implements CommandExecutor {
 			if (unique(name.toString())) {
 				Location max_point = selection.getMaximumPoint();
 				Location min_point = selection.getMinimumPoint();
-				if ( checkBreaches(max_point) == null && checkBreaches(min_point) == null){
+				if (checkBreaches(max_point) == null
+						&& checkBreaches(min_point) == null) {
 					RegionNamePair r = new RegionNamePair(name.toString(),
 							min_point, max_point);
 					Lock l = new Lock(r);
 					lockManager.addLock(l);
 
-					sender.sendMessage("Added sucessfully");	
+					sender.sendMessage("Added sucessfully");
 				} else {
 					sendError(sender, "Regions may not overlap (+/- 1)");
 				}
@@ -423,8 +428,8 @@ public class CommandManager implements CommandExecutor {
 				&& (foreignObject.getX() >= region_min.getX() - 1)
 				&& (foreignObject.getZ() <= region_max.getZ() + 1)
 				&& (foreignObject.getZ() >= region_min.getZ() - 1)
-				&& (foreignObject.getY() <= region_max.getY() + 1) 
-				&& (foreignObject.getY() >= region_min.getY() - 1));
+				&& (foreignObject.getY() <= region_max.getY() + 1) && (foreignObject
+				.getY() >= region_min.getY() - 1));
 	}
 
 	public void releaseOwnerships(String name) {
@@ -433,20 +438,21 @@ public class CommandManager implements CommandExecutor {
 				if (l.getCellMateCount() == 0) {
 					l.releaseLock();
 				} else {
-					String newOwner = null;
-					for ( int i = 1 ; i < l.getCellMateCount() ; i++ ){
-						Player target = Bukkit.getServer().getPlayer(l.getCellMateByIndex(i));
-						if ( target != null ){
-							newOwner = l.getCellMateByIndex(i);
+					boolean valid = false;
+
+					for (int i = 0; i <= l.getCellMateCount(); i++) {
+						Player target = Bukkit.getServer().getPlayer(
+								l.getCellMateByIndex(i));
+						if (target != null
+								&& (!(target.getName().equals(name)))) {
+							l.setOwner(target.getName());
+							valid = true;
+							break;
 						}
 					}
-					if (newOwner != null ){
-						l.setOwner(newOwner);
-					} else {
+					if (!valid) {
 						l.releaseLock();
 					}
-					
-					
 				}
 			}
 
