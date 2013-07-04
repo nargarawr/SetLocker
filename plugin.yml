@@ -1,14 +1,3 @@
 name: SetLocker
 main: com.craigknott.setLocker.SetLocker
 version: 1
-permissions: 
-	user.*:
-		description: Can access sets
-	user.setlock:
-		description: allows you to lock a set
-		default: true
-	user.setunlock:
-		description: allows you to unlock a set
-		default: true
-
-	 
