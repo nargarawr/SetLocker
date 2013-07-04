@@ -105,16 +105,54 @@ public class CommandManager implements CommandExecutor {
 				leaveRegion(sender, args[1]);
 			}
 			break;
+		case ("swapOwner"):
+			if (args.length == 1) {
+				sendError(sender,
+						"Missing region argument (/lock swapOwner <region> <new-owner>)");
+			} else if (args.length == 2) {
+				sendError(sender,
+						"Missing player argument (/lock swapOwner <region> <new-owner>)");
+			} else {
+				swapOwner(sender, args[1], args[2]);
+			}
+			break;
+		case("about"):
+			displayAbout(sender);
+			break;
 		default:
 			sendError(
 					sender,
-					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, acquire, release or list");
+					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, swapOwner, acquire, release, list or about");
 			break;
 		}
 
 		return true;
 	}
+	
+	public void displayAbout(CommandSender sender ){
+		String message = "SetLocker was produced by Craig Knott (Nargarawr). \n" +
+				"If you encounter any bugs, please email me at psyck@nottingham.ac.uk.\n" +
+				"The source code is available at https://github.com/nargarawr/SetLocker";
+		sender.sendMessage(ChatColor.valueOf("GOLD").toString().concat(message));
+	}
 
+	public boolean swapOwner ( CommandSender sender, String region, String newOwner){
+		Lock l = lockManager.getLockByName(region);
+
+		if (l != null) {
+			if (l.isLocked() && (l.getWarden().equals(((Player) sender).getName()))){
+				l.swapOwner(newOwner);
+			} else if (l.isLocked() && (!(l.getWarden().equals(((Player) sender).getName())))){
+				sendError(sender, "You are not the owner of this region");
+			} else {
+				sendError(sender, "You are not the owner of this region");
+			}
+		} else {
+			sendError(sender, "That region does not exist");
+		}
+		return true;
+	}
+	
 	public boolean regionInfo(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 
@@ -173,7 +211,12 @@ public class CommandManager implements CommandExecutor {
 				for (String s : l.getCellMates()) {
 					if (s.equals(player)) {
 						l.removeCellMate(player);
-						sender.sendMessage("Sucessfully removed");
+						if ( player.equals(l.getWarden() )) {
+							l.releaseLock();
+							sender.sendMessage("Sucessfully removed, and lock released");
+						} else {
+							sender.sendMessage("Sucessfully removed");
+						}
 						return true;
 					}
 				}

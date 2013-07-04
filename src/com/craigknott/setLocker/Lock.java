@@ -27,6 +27,11 @@ public class Lock {
 		return (cellMates.size() > 0 );
 	}
 
+	public boolean swapOwner ( String newOwner ) {
+		warden = newOwner;
+		return true;
+	}
+	
 	public synchronized boolean removeCellMate(String name){
 		cellMates.remove(name);
 		return true;

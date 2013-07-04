@@ -3,14 +3,8 @@ author: Craig Knott (Nargarawr)
 main: com.craigknott.setLocker.SetLocker
 version: 1
 commands:
-   getCurrentSelection:
-      description: Get's the player's current world edit selection
-      usage: /<command>
-      permission: SetLocker.getCurrentSelection
-      permission-message: You don't have <permission>
    lock:
-     description: Used to create, acquire, release and list locks
+     description: Manage locks
      usage: /<command> [action] [p1]
      permission: SetLocker.lock
      permission-message: You don't have <permission>
-       
