@@ -112,7 +112,7 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			sender.sendMessage(l.acquireLock(name));
+			sender.sendMessage(l.acquireLock(((Player) sender).getName()));
 		}
 		return true;
 	}
