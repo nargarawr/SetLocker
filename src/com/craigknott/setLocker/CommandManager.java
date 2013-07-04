@@ -66,10 +66,11 @@ public class CommandManager implements CommandExecutor {
 			break;
 		case ("regionInfo"):
 			if (args.length == 1) {
-				sendError(sender, "Missing region argument (/lock info <region>)");
+				sendError(sender, "Missing region argument (/lock regionInfo <region>)");
 			} else {
 				regionInfo(sender,args[1]);
 			}
+		break;
 		case ("addPlayer"):
 			if (args.length == 1) {
 				sendError(sender, "Missing region argument (/lock addPlayer <region> <username>)");
@@ -79,13 +80,22 @@ public class CommandManager implements CommandExecutor {
 				addPlayer(sender, args[1], args[2]);
 			}
 			break;
+		case ("removePlayer"):
+			if (args.length == 1) {
+				sendError(sender, "Missing region argument (/lock removePlayer <region> <username>)");
+			} else if (args.length == 2) {
+				sendError(sender, "Missing player argument (/lock removePlayer <region> <username>)");
+			} else {
+				removePlayer(sender, args[1], args[2]);
+			}
+			break;
 		case ("list"):
 			lockList(sender);
 			break;
 		default:
 			sendError(
 					sender,
-					"The first argument was invalid, please specify either: createRegion, deleteRegion, acquire, release or list");
+					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, regionInfo, acquire, release or list");
 			break;
 		}
 
@@ -97,13 +107,18 @@ public class CommandManager implements CommandExecutor {
 
 		if (l != null) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("Region: " + name + "\n");
+			sb.append("\nRegion: " + name + "\n");
 			sb.append("Locked?: " + l.isLocked() + "\n");
 			if ( l.isLocked() ){
 				sb.append("Owner: " + l.getWarden() + "\n");
+				
+				if ( l.getCellMateCount() > 0 ){
+					sb.append("Crew: ");
+				}
+				
 				for ( String s : l.getCellMates() ){
 					if ( !(s.equals(l.getWarden()))) {
-						sb.append("Crew: " + s + "\n");
+						sb.append(s + ", ");
 					}
 				}
 				
@@ -128,11 +143,38 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 	
+	public boolean removePlayer ( CommandSender sender, String name, String player ){
+		Lock l = lockManager.getLockByName(name);
+
+		boolean notFound = true;
+		
+		if (l != null) {
+			for ( String s : l.getCellMates() ){
+				if ( s.equals(player)){
+					l.removeCellMate(player);
+					sender.sendMessage("Sucessfully removed");
+					notFound = false;
+				}
+			}
+			if ( notFound ) {
+				sendError(sender,"That player does not belong to this region");
+			}
+		} else {
+			sendError(sender,"That region does not exist");
+		}
+		return true;
+	}
+	
 	public boolean acquireLock(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			sender.sendMessage(l.acquireLock(((Player) sender).getName()));
+			if ( l.acquireLock(((Player) sender).getName()) ) {
+				sender.sendMessage("Sucessfully Locked");
+			} else {
+				sendError(sender, "This region is already locked and cannot be acquired");
+			}
+			
 		}
 		return true;
 	}
@@ -198,7 +240,7 @@ public class CommandManager implements CommandExecutor {
 
 	public boolean lockList(CommandSender sender) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("=================\n");
+		sb.append("\n=================\n");
 		sb.append(" Current Regions\n");
 		sb.append("=================\n");
 

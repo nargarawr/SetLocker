@@ -12,8 +12,7 @@ public class SetLocker extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandManager c = new CommandManager(this);
-		
-		getCommand("getCurrentSelection").setExecutor(c);
+
 		getCommand("lock").setExecutor(c);
 	}
 

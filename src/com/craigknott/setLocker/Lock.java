@@ -27,19 +27,33 @@ public class Lock {
 		return (cellMates.size() > 0 );
 	}
 
-	public String acquireLock(String name) {
+	public boolean removeCellMate(String name){
+		cellMates.remove(name);
+		return true;
+	}
+	
+	public boolean acquireLock(String name) {
 		if ( isLocked() ) {
-			return "This region is already locked and cannot be acquired"; 
+			return false; 
 		} else {
 			warden = name;
 			cellMates.add(name);
-			return "Sucesfully locked region";
+			return true;
 		}
 			
 	} 
 	
+	public ArrayList<String> getCellMates (){
+		return cellMates;
+	}
+	
+	public int getCellMateCount ( ){ 
+		return cellMates.size() - 1;
+	}
+	
 	public String addCellMates(String name){
-		return null;
+		cellMates.add(name);
+		return "Sucessfully added";
 	}
 	
 	public String releaseLock() {
