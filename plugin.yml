@@ -8,5 +8,8 @@ commands:
       usage: /<command>
       permission: SetLocker.getCurrentSelection
       permission-message: You don't have <permission>
- 
- 
+   setLock:
+     description: Sets lock
+     usage: /<command> [action] [name]
+     permission: SetLocker.setLock
+     permission-message: You don't have <permission>

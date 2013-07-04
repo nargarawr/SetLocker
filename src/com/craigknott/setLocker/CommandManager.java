@@ -53,12 +53,29 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public boolean cset(CommandSender sender, String label, String[] args) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < args.length; i++) {
-			sb.append(args[i] + " ");
+	public boolean setLock(CommandSender sender, String label, String[] args) {
+		if (!(sender instanceof Player)) {
+			sendError(sender, "This command may only be invoked by a player");
+			return true;
 		}
-		sender.sendMessage(sb.toString());
+
+		if (args.length != 2) {
+			sendError(sender,
+					"Incorrect number of arguments given (expected 0, given "
+							+ args.length + ")");
+			return true;
+		}
+
+		switch (args[0]) {
+			case ("new"):
+				sender.sendMessage("new was typed");
+				break;
+			default:
+				sendError(sender,
+						"The first argument was invalid, please specify either: new");
+				break;
+		}
+
 		return true;
 	}
 
@@ -70,8 +87,8 @@ public class CommandManager implements CommandExecutor {
 			return getCurrentSelection(sender, label, args);
 		}
 
-		if (cmd.getName().equalsIgnoreCase("setlock")) {
-			return cset(sender, label, args);
+		if (cmd.getName().equalsIgnoreCase("setLock")) {
+			return setLock(sender, label, args);
 		}
 		return false;
 	}
