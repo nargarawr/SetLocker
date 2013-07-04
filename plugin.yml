@@ -1,3 +1,9 @@
 name: SetLocker
 main: com.craigknott.setLocker.SetLocker
 version: 1
+commands:
+   getCurrentSelection:
+      description: Get's the player's current world edit selection
+      usage: /<command> [player]
+      permission: SetLocker.getCurrentSelection
+      permission-message: You don't have <permission>
