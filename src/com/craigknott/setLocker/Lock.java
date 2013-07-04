@@ -1,13 +1,17 @@
 package com.craigknott.setLocker;
 
+import java.util.ArrayList;
+
+import org.bukkit.entity.Player;
+
 public class Lock {
 
 	private RegionNamePair region;
-	private boolean locked;
+	private ArrayList<String> allowedPlayers;
 
 	public Lock(RegionNamePair region) {
 		this.region = region;
-		locked = false;
+		allowedPlayers = new ArrayList<String>();
 	}
 
 	public RegionNamePair getRegion() {
@@ -15,15 +19,15 @@ public class Lock {
 	}
 
 	public boolean isLocked() {
-		return locked;
+		return (allowedPlayers.size() > 0 );
 	}
 
-	public void acquireLock() {
-		this.locked = true;
+	public void acquireLock(String name) {
+		allowedPlayers.add(name);
 	}
 
 	public void releaseLock() {
-		this.locked = false;
+		allowedPlayers.clear();
 	}
 
 }

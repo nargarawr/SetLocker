@@ -9,7 +9,8 @@ commands:
       permission: SetLocker.getCurrentSelection
       permission-message: You don't have <permission>
    lock:
-     description: Sets lock
-     usage: /<command> [action] [name]
+     description: Used to create, acquire, release and list locks
+     usage: /<command> [action] [p1]
      permission: SetLocker.lock
      permission-message: You don't have <permission>
+       

@@ -55,7 +55,7 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public boolean setLock(CommandSender sender, String label, String[] args) {
+	public boolean lock(CommandSender sender, String label, String[] args) {
 		if (!(sender instanceof Player)) {
 			sendError(sender, "This command may only be invoked by a player");
 			return true;
@@ -63,44 +63,13 @@ public class CommandManager implements CommandExecutor {
 
 		switch (args[0]) {
 		case ("createRegion"):
-			WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
-					.getPluginManager().getPlugin("WorldEdit");
-			Selection selection = worldEdit.getSelection((Player) sender);
-
-			if (selection != null) {
-				RegionNamePair r = new RegionNamePair(args[1].toString(),
-						selection);
-				Lock l = new Lock(r);
-				lockManager.addLock(l);
-				
-				sender.sendMessage("Added sucessfully");
-			} else {
-				sendError(sender, "No selection has been made");
-			}
-
+			createRegion(sender, args[1]);
 			break;
 		case ("acquire"):
-
 		case ("release"):
-
 			break;
 		case ("list"):
-			
-			StringBuilder sb = new StringBuilder();
-			sb.append("=================\n");
-			sb.append(" Current Regions\n");
-			sb.append("=================\n");
-			
-			for (Lock l : lockManager.getLocks()) {
-				String locked = null;
-				if (l.isLocked()) {
-					locked = "(Locked)\n";
-				} else {
-					locked = "(Free)\n";
-				}
-				sb.append(l.getRegion().getName() + " " + locked);
-			}
-			sender.sendMessage(sb.toString());
+			lockList(sender);
 			break;
 		default:
 			sendError(
@@ -112,6 +81,43 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
+	public boolean createRegion ( CommandSender sender, String name ) {
+		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
+				.getPluginManager().getPlugin("WorldEdit");
+		Selection selection = worldEdit.getSelection((Player) sender);
+
+		if (selection != null) {
+			RegionNamePair r = new RegionNamePair(name.toString(),
+					selection);
+			Lock l = new Lock(r);
+			lockManager.addLock(l);
+			
+			sender.sendMessage("Added sucessfully");
+		} else {
+			sendError(sender, "No selection has been made");
+		}
+		return true;
+	}
+	
+	public boolean lockList ( CommandSender sender ){
+		StringBuilder sb = new StringBuilder();
+		sb.append("=================\n");
+		sb.append(" Current Regions\n");
+		sb.append("=================\n");
+		
+		for (Lock l : lockManager.getLocks()) {
+			String locked = null;
+			if (l.isLocked()) {
+				locked = "(Locked)\n";
+			} else {
+				locked = "(Free)\n";
+			}
+			sb.append(l.getRegion().getName() + " " + locked);
+		}
+		sender.sendMessage(sb.toString());
+		return true;
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -121,7 +127,7 @@ public class CommandManager implements CommandExecutor {
 		}
 
 		if (cmd.getName().equalsIgnoreCase("lock")) {
-			return setLock(sender, label, args);
+			return lock(sender, label, args);
 		}
 		return false;
 	}
