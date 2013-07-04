@@ -40,10 +40,14 @@ public class CommandManager implements CommandExecutor {
 
 		switch (args[0]) {
 		case ("createRegion"):
-			if (args.length == 1) {
-				sendError(sender, "Missing region argument (/lock createRegion <name>)");
+			if ( ((Player)sender).hasPermission("setManager") ) {
+				if (args.length == 1) {
+					sendError(sender, "Missing region argument (/lock createRegion <name>)");
+				} else {
+					createRegion(sender, args[1]);
+				}
 			} else {
-				createRegion(sender, args[1]);
+				sendError(sender, "You do not have permission to do this");
 			}
 			break;
 		case ("deleteRegion"):

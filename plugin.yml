@@ -5,6 +5,7 @@ version: 1
 commands:
    lock:
      description: Manage locks
-     usage: /<command> [action] [p1]
-     permission: SetLocker.lock
-     permission-message: You don't have <permission>
+     usage: /<command> [action] [p1] [p2]
+permissions:
+  setManager:
+    description: Can add/remove sets
