@@ -1,15 +1,17 @@
 package com.craigknott.setLocker;
 
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import org.bukkit.Location;
 
 public class RegionNamePair {
 
 	private String name;
-	private Selection region;
-	
-	public RegionNamePair (String name, Selection region) {
+	private Location min_point;
+	private Location max_point;
+
+	public RegionNamePair(String name, Location min_point, Location max_point) {
 		this.name = name;
-		this.region = region;
+		this.min_point = min_point;
+		this.max_point = max_point;
 	}
 
 	public String getName() {
@@ -20,12 +22,20 @@ public class RegionNamePair {
 		this.name = name;
 	}
 
-	public Selection getRegion() {
-		return region;
+	public Location getMin_point() {
+		return min_point;
 	}
 
-	public void setRegion(Selection region) {
-		this.region = region;
+	public void setMin_point(Location min_point) {
+		this.min_point = min_point;
 	}
-	
+
+	public Location getMax_point() {
+		return max_point;
+	}
+
+	public void setMax_point(Location max_point) {
+		this.max_point = max_point;
+	}
+
 }

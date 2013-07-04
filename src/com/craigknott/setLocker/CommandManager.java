@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -118,7 +119,7 @@ public class CommandManager implements CommandExecutor {
 				swapOwner(sender, args[1], args[2]);
 			}
 			break;
-		case("about"):
+		case ("about"):
 			displayAbout(sender);
 			break;
 		default:
@@ -130,22 +131,27 @@ public class CommandManager implements CommandExecutor {
 
 		return true;
 	}
-	
-	public void displayAbout(CommandSender sender ){
-		String message = "SetLocker was produced by Craig Knott (Nargarawr). \n" +
-				"If you encounter any bugs, please email me at psyck@nottingham.ac.uk.\n" +
-				"The source code is available at https://github.com/nargarawr/SetLocker\n" +
-				"Documentation available at http://tinyurl.com/SetLockerPdf";
+
+	public void displayAbout(CommandSender sender) {
+		String message = "SetLocker was produced by Craig Knott (Nargarawr). \n"
+				+ "If you encounter any bugs, please email me at psyck@nottingham.ac.uk.\n"
+				+ "The source code is available at https://github.com/nargarawr/SetLocker\n"
+				+ "Documentation available at http://tinyurl.com/SetLockerPdf";
 		sender.sendMessage(ChatColor.valueOf("GOLD").toString().concat(message));
 	}
 
-	public boolean swapOwner ( CommandSender sender, String region, String newOwner){
+	public boolean swapOwner(CommandSender sender, String region,
+			String newOwner) {
 		Lock l = lockManager.getLockByName(region);
 
 		if (l != null) {
-			if (l.isLocked() && (l.getWarden().equalsIgnoreCase(((Player) sender).getName()))){
+			if (l.isLocked()
+					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName()))) {
 				l.swapOwner(newOwner);
-			} else if (l.isLocked() && (!(l.getWarden().equalsIgnoreCase(((Player) sender).getName())))){
+			} else if (l.isLocked()
+					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName())))) {
 				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
@@ -155,7 +161,7 @@ public class CommandManager implements CommandExecutor {
 		}
 		return true;
 	}
-	
+
 	public boolean regionInfo(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 
@@ -163,6 +169,12 @@ public class CommandManager implements CommandExecutor {
 			StringBuilder sb = new StringBuilder();
 			sb.append("\nRegion: " + name + "\n");
 			sb.append("Locked?: " + l.isLocked() + "\n");
+			sb.append(l.getRegion().getMax_point().getX() + "\n");
+			sb.append(l.getRegion().getMax_point().getY() + "\n");
+			sb.append(l.getRegion().getMax_point().getZ() + "\n");
+			sb.append(l.getRegion().getMin_point().getX() + "\n");
+			sb.append(l.getRegion().getMin_point().getY() + "\n");
+			sb.append(l.getRegion().getMin_point().getZ() + "\n");
 			if (l.isLocked()) {
 				sb.append("Owner: " + l.getWarden() + "\n");
 
@@ -190,9 +202,13 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if (l.isLocked() && (l.getWarden().equalsIgnoreCase(((Player) sender).getName()))){
+			if (l.isLocked()
+					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName()))) {
 				sender.sendMessage(l.addCellMates(player));
-			} else if (l.isLocked() && (!(l.getWarden().equalsIgnoreCase(((Player) sender).getName())))){
+			} else if (l.isLocked()
+					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName())))) {
 				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
@@ -210,11 +226,13 @@ public class CommandManager implements CommandExecutor {
 		boolean notFound = true;
 
 		if (l != null) {
-			if (l.isLocked() && (l.getWarden().equalsIgnoreCase(((Player) sender).getName()))){
+			if (l.isLocked()
+					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName()))) {
 				for (String s : l.getCellMates()) {
 					if (s.equalsIgnoreCase(player)) {
 						l.removeCellMate(player);
-						if ( player.equalsIgnoreCase(l.getWarden() )) {
+						if (player.equalsIgnoreCase(l.getWarden())) {
 							l.releaseLock();
 							sender.sendMessage("Sucessfully removed, and lock released");
 						} else {
@@ -227,7 +245,9 @@ public class CommandManager implements CommandExecutor {
 					sendError(sender,
 							"That player does not belong to this region");
 				}
-			} else if (l.isLocked() && (!(l.getWarden().equalsIgnoreCase(((Player) sender).getName())))){
+			} else if (l.isLocked()
+					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName())))) {
 				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
@@ -247,7 +267,8 @@ public class CommandManager implements CommandExecutor {
 			for (String s : l.getCellMates()) {
 				if (s.equalsIgnoreCase(((Player) sender).getName())) {
 					l.removeCellMate(((Player) sender).getName());
-					if (((Player) sender).getName().equalsIgnoreCase(l.getWarden())){
+					if (((Player) sender).getName().equalsIgnoreCase(
+							l.getWarden())) {
 						l.releaseLock();
 						sender.sendMessage("Sucessfully left, lock released");
 					} else {
@@ -306,7 +327,7 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public synchronized boolean deleteRegion(CommandSender sender, String name) {
+	public boolean deleteRegion(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 		if (l != null) {
 			sender.sendMessage(lockManager.delete(l));
@@ -316,15 +337,16 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
-	public synchronized boolean createRegion(CommandSender sender, String name) {
+	public boolean createRegion(CommandSender sender, String name) {
 		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
 				.getPluginManager().getPlugin("WorldEdit");
 		Selection selection = worldEdit.getSelection((Player) sender);
-
+				
 		if (selection != null) {
 			if (unique(name.toString())) {
-				RegionNamePair r = new RegionNamePair(name.toString(),
-						selection);
+				Location max_point = selection.getMaximumPoint();
+				Location min_point = selection.getMaximumPoint();
+				RegionNamePair r = new RegionNamePair(name.toString(), min_point, max_point);
 				Lock l = new Lock(r);
 				lockManager.addLock(l);
 
@@ -366,23 +388,44 @@ public class CommandManager implements CommandExecutor {
 		return false;
 	}
 
-	public void releaseOwnerships(String name){
-		for ( Lock l : lockManager.getLocks() ){
-			if ( l.isLocked() && l.getWarden().equalsIgnoreCase(name)) {
-				if ( l.getCellMateCount() == 0 ){
+	public Lock checkBreaches(Location location) {
+		for (Lock l : lockManager.getLocks()) {
+			Location min = l.getRegion().getMax_point();			
+			Location max = l.getRegion().getMin_point();
+			if (isInRegion(location, min, max)) {
+				return l;
+			}
+		}
+		return null;
+	}
+
+	public boolean isInRegion(Location player_location, Location region_min,
+			Location region_max) {
+		return ((player_location.getBlockX() <= region_max.getBlockX())
+				&& (player_location.getBlockX() >= region_min.getBlockX())
+				&& (player_location.getBlockZ() <= region_max.getBlockZ())
+				&& (player_location.getBlockZ() >= region_min.getBlockZ())
+				/*&& (player_location.getBlockY() <= region_max.getBlockY()) 
+				&& (player_location.getBlockY() >= region_min.getBlockY())*/);
+	}
+
+	public void releaseOwnerships(String name) {
+		for (Lock l : lockManager.getLocks()) {
+			if (l.isLocked() && l.getWarden().equalsIgnoreCase(name)) {
+				if (l.getCellMateCount() == 0) {
 					l.releaseLock();
 				} else {
 					String newOwner = name;
-					while ( newOwner.equalsIgnoreCase(name) ){
+					while (newOwner.equalsIgnoreCase(name)) {
 						Random r = new Random();
-						int x = r.nextInt() % l.getCellMateCount() + 1; 
+						int x = r.nextInt() % l.getCellMateCount() + 1;
 						newOwner = l.getCellMateByIndex(x);
 					}
 					l.swapOwner(newOwner);
 				}
 			}
-			
+
 		}
 	}
-	
+
 }
