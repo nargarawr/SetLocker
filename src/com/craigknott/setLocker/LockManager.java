@@ -18,6 +18,11 @@ public class LockManager {
 		return locks;
 	}
 	
+	public String delete( Lock l ){
+		locks.remove(l);
+		return "Sucessfully Removed";
+	}
+	
 	public Lock getLockByName(String name){
 		for ( Lock l : locks ){
 			if ( l.getRegion().getName().equals(name)){

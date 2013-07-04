@@ -79,6 +79,13 @@ public class CommandManager implements CommandExecutor {
 				createRegion(sender, args[1]);
 			}
 			break;
+		case ("deleteRegion"):
+			if (flag) {
+				sendError(sender, "Missing name argument");
+			} else {
+				deleteRegion(sender, args[1]);
+			}
+			break;
 		case ("acquire"):
 			if (flag) {
 				
@@ -101,7 +108,7 @@ public class CommandManager implements CommandExecutor {
 		default:
 			sendError(
 					sender,
-					"The first argument was invalid, please specify either: createRegion, acquire, release or list");
+					"The first argument was invalid, please specify either: createRegion, deleteRegion, acquire, release or list");
 			break;
 		}
 
@@ -144,6 +151,12 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
+	public boolean deleteRegion(CommandSender sender, String name) {
+		Lock l = lockManager.getLockByName(name);
+		sender.sendMessage(lockManager.delete(l));
+		return true;
+	}
+	
 	public boolean createRegion(CommandSender sender, String name) {
 		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
 				.getPluginManager().getPlugin("WorldEdit");
