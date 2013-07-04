@@ -14,7 +14,7 @@ public class CommandManager implements CommandExecutor {
 
 	private SetLocker plugin;
 	private LockManager lockManager;
-	
+
 	public CommandManager(SetLocker plugin) {
 		this.plugin = plugin;
 		lockManager = new LockManager();
@@ -62,37 +62,49 @@ public class CommandManager implements CommandExecutor {
 		}
 
 		switch (args[0]) {
-			case ("acquire"):
-				WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-				Selection selection = worldEdit.getSelection((Player) sender);
-			
-				if ( selection != null ){
-					RegionNamePair r = new RegionNamePair(args[1].toString(), selection);
-					Lock l = new Lock(r);
-					lockManager.addLock(l);
-				} else {
-					sendError(sender, "No selection has been made");
-				}
-			
-				break;
-			case ("release"):
+		case ("createRegion"):
+			WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
+					.getPluginManager().getPlugin("WorldEdit");
+			Selection selection = worldEdit.getSelection((Player) sender);
 
-				break;
-			case ("list"):
-				for ( Lock l : lockManager.getLocks() ){
-					String locked = null;
-					if ( l.isLocked() ) {
-						locked = "Locked!";
-					} else {
-						locked = "Free";
-					}
-					
-					sender.sendMessage(l.getRegion().getName() + " " + locked);
+			if (selection != null) {
+				RegionNamePair r = new RegionNamePair(args[1].toString(),
+						selection);
+				Lock l = new Lock(r);
+				lockManager.addLock(l);
+			} else {
+				sendError(sender, "No selection has been made");
+			}
+
+			break;
+		case ("acquire"):
+
+		case ("release"):
+
+			break;
+		case ("list"):
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("=================\n");
+			sb.append(" Current Regions\n");
+			sb.append("=================\n");
+			
+			for (Lock l : lockManager.getLocks()) {
+				String locked = null;
+				if (l.isLocked()) {
+					locked = "(Locked)\n";
+				} else {
+					locked = "(Free)\n";
 				}
-			default:
-				sendError(sender,
-						"The first argument was invalid, please specify either: acquire, release or list");
-				break;
+				sb.append(l.getRegion().getName() + " " + locked);
+				sender.sendMessage(sb.toString());
+			}
+			break;
+		default:
+			sendError(
+					sender,
+					"The first argument was invalid, please specify either: createRegion, acquire, release or list");
+			break;
 		}
 
 		return true;
