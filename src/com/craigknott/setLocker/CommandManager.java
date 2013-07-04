@@ -184,6 +184,7 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
+			l.acquireLock(name);
 			sender.sendMessage("Sucessfully Locked");
 		} else {
 			sendError(sender,
