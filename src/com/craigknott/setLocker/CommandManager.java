@@ -61,13 +61,6 @@ public class CommandManager implements CommandExecutor {
 			return true;
 		}
 
-		if (args.length != 2) {
-			sendError(sender,
-					"Incorrect number of arguments given (expected 2, given "
-							+ args.length + ")");
-			return true;
-		}
-
 		switch (args[0]) {
 			case ("acquire"):
 				WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
@@ -83,13 +76,22 @@ public class CommandManager implements CommandExecutor {
 			
 				break;
 			case ("release"):
-				for ( Lock l : lockManager.getLocks() ){ 
-					sender.sendMessage(l.getRegion().getName());
-				}
+
 				break;
+			case ("list"):
+				for ( Lock l : lockManager.getLocks() ){
+					String locked = null;
+					if ( l.isLocked() ) {
+						locked = "Locked!";
+					} else {
+						locked = "Free";
+					}
+					
+					sender.sendMessage(l.getRegion().getName() + " " + locked);
+				}
 			default:
 				sendError(sender,
-						"The first argument was invalid, please specify either: acquire, or release");
+						"The first argument was invalid, please specify either: acquire, release or list");
 				break;
 		}
 
