@@ -13,9 +13,11 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 public class CommandManager implements CommandExecutor {
 
 	private SetLocker plugin;
-
+	private LockManager lockManager;
+	
 	public CommandManager(SetLocker plugin) {
 		this.plugin = plugin;
+		lockManager = new LockManager();
 	}
 
 	public void sendError(CommandSender sender, String message) {
@@ -68,7 +70,22 @@ public class CommandManager implements CommandExecutor {
 
 		switch (args[0]) {
 			case ("acquire"):
-				
+				WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+				Selection selection = worldEdit.getSelection((Player) sender);
+			
+				if ( selection != null ){
+					RegionNamePair r = new RegionNamePair(args[1].toString(), selection);
+					Lock l = new Lock(r);
+					lockManager.addLock(l);
+				} else {
+					sendError(sender, "No selection has been made");
+				}
+			
+				break;
+			case ("release"):
+				for ( Lock l : lockManager.getLocks() ){ 
+					sender.sendMessage(l.getRegion().getName());
+				}
 				break;
 			default:
 				sendError(sender,
