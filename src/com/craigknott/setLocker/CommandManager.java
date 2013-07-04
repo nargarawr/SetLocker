@@ -18,6 +18,10 @@ public class CommandManager implements CommandExecutor {
 	private SetLocker plugin;
 	private LockManager lockManager;
 
+	public SetLocker getPlugin () {
+		return plugin;
+	}
+	
 	public CommandManager(SetLocker plugin) {
 		this.plugin = plugin;
 		lockManager = new LockManager();
@@ -156,7 +160,7 @@ public class CommandManager implements CommandExecutor {
 			if (l.isLocked()
 					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
 							.getName()))) {
-				l.swapOwner(newOwner);
+				l.setOwner(newOwner);
 			} else if (l.isLocked()
 					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
 							.getName())))) {
@@ -177,7 +181,7 @@ public class CommandManager implements CommandExecutor {
 			StringBuilder sb = new StringBuilder();
 			sb.append("\nRegion: " + name + "\n");
 			sb.append("Locked?: " + l.isLocked() + "\n");
-			sb.append("Location: " + l.getRegion().getMax_point().getWorld() + "\n");
+			sb.append("Location:\n");
 			sb.append("(" + l.getRegion().getMax_point().getX() + ", ");
 			sb.append(l.getRegion().getMax_point().getY() + ", ");
 			sb.append(l.getRegion().getMax_point().getZ() + ")\n");
@@ -429,13 +433,20 @@ public class CommandManager implements CommandExecutor {
 				if (l.getCellMateCount() == 0) {
 					l.releaseLock();
 				} else {
-					String newOwner = name;
-					while (newOwner.equalsIgnoreCase(name)) {
-						Random r = new Random();
-						int x = r.nextInt() % l.getCellMateCount() + 1;
-						newOwner = l.getCellMateByIndex(x);
+					String newOwner = null;
+					for ( int i = 1 ; i < l.getCellMateCount() ; i++ ){
+						Player target = Bukkit.getServer().getPlayer(l.getCellMateByIndex(i));
+						if ( target != null ){
+							newOwner = l.getCellMateByIndex(i);
+						}
 					}
-					l.swapOwner(newOwner);
+					if (newOwner != null ){
+						l.setOwner(newOwner);
+					} else {
+						l.releaseLock();
+					}
+					
+					
 				}
 			}
 
