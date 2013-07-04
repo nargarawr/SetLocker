@@ -41,28 +41,28 @@ public class CommandManager implements CommandExecutor {
 		switch (args[0]) {
 		case ("createRegion"):
 			if (args.length == 1) {
-				sendError(sender, "Missing name argument");
+				sendError(sender, "Missing region argument (/lock createRegion <region>)");
 			} else {
 				createRegion(sender, args[1]);
 			}
 			break;
 		case ("deleteRegion"):
 			if (args.length == 1) {
-				sendError(sender, "Missing name argument");
+				sendError(sender, "Missing region argument (/lock deleteRegion <region>)");
 			} else {
 				deleteRegion(sender, args[1]);
 			}
 			break;
 		case ("acquire"):
 			if (args.length == 1) {
-				sendError(sender, "Missing name argument");
+				sendError(sender, "Missing region argument (/lock acquire <region>)");
 			} else {
 				acquireLock(sender, args[1]);
 			}
 			break;
 		case ("release"):
 			if (args.length == 1) {
-				sendError(sender, "Missing name argument");
+				sendError(sender, "Missing region argument (/lock release <region>)");
 			} else {
 				releaseLock(sender, args[1]);
 			}
@@ -81,7 +81,7 @@ public class CommandManager implements CommandExecutor {
 						"Missing region argument (/lock addPlayer <region> <username>)");
 			} else if (args.length == 2) {
 				sendError(sender,
-						"Missing player argument (/lock addPlayer <region> <username>)");
+						"Missing username argument (/lock addPlayer <region> <username>)");
 			} else {
 				addPlayer(sender, args[1], args[2]);
 			}
@@ -92,7 +92,7 @@ public class CommandManager implements CommandExecutor {
 						"Missing region argument (/lock removePlayer <region> <username>)");
 			} else if (args.length == 2) {
 				sendError(sender,
-						"Missing player argument (/lock removePlayer <region> <username>)");
+						"Missing username argument (/lock removePlayer <region> <username>)");
 			} else {
 				removePlayer(sender, args[1], args[2]);
 			}
@@ -114,7 +114,7 @@ public class CommandManager implements CommandExecutor {
 						"Missing region argument (/lock swapOwner <region> <new-owner>)");
 			} else if (args.length == 2) {
 				sendError(sender,
-						"Missing player argument (/lock swapOwner <region> <new-owner>)");
+						"Missing new-owner argument (/lock swapOwner <region> <new-owner>)");
 			} else {
 				swapOwner(sender, args[1], args[2]);
 			}
@@ -122,10 +122,18 @@ public class CommandManager implements CommandExecutor {
 		case ("about"):
 			displayAbout(sender);
 			break;
+		case("warpTo"):
+			if (args.length == 1) {
+				sendError(sender,
+						"Missing region argument (/lock warpTo <region>)");
+			} else {
+				leaveRegion(sender, args[1]);
+			}
+			break;
 		default:
 			sendError(
 					sender,
-					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, swapOwner, acquire, release, list or about");
+					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, swapOwner, acquire, release, list, warpTo or about");
 			break;
 		}
 
@@ -169,12 +177,13 @@ public class CommandManager implements CommandExecutor {
 			StringBuilder sb = new StringBuilder();
 			sb.append("\nRegion: " + name + "\n");
 			sb.append("Locked?: " + l.isLocked() + "\n");
-			sb.append(l.getRegion().getMax_point().getX() + "\n");
-			sb.append(l.getRegion().getMax_point().getY() + "\n");
-			sb.append(l.getRegion().getMax_point().getZ() + "\n");
-			sb.append(l.getRegion().getMin_point().getX() + "\n");
-			sb.append(l.getRegion().getMin_point().getY() + "\n");
-			sb.append(l.getRegion().getMin_point().getZ() + "\n");
+			sb.append("Location:\n");
+			sb.append("(" + l.getRegion().getMax_point().getX() + ", ");
+			sb.append(l.getRegion().getMax_point().getY() + ", ");
+			sb.append(l.getRegion().getMax_point().getZ() + ")\n");
+			sb.append("(" + l.getRegion().getMin_point().getX() + ", ");
+			sb.append(l.getRegion().getMin_point().getY() + ", ");
+			sb.append(l.getRegion().getMin_point().getZ() + ")\n");
 			if (l.isLocked()) {
 				sb.append("Owner: " + l.getWarden() + "\n");
 
