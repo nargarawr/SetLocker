@@ -15,24 +15,24 @@ public class Lock {
 		cellMates = new ArrayList<String>();
 	}
 
-	public RegionNamePair getRegion() {
+	public synchronized RegionNamePair getRegion() {
 		return region;
 	}
 
-	public String getWarden () {
+	public synchronized  String getWarden () {
 		return warden;
 	}
 	
-	public boolean isLocked() {
+	public synchronized boolean isLocked() {
 		return (cellMates.size() > 0 );
 	}
 
-	public boolean removeCellMate(String name){
+	public synchronized boolean removeCellMate(String name){
 		cellMates.remove(name);
 		return true;
 	}
 	
-	public boolean acquireLock(String name) {
+	public synchronized boolean acquireLock(String name) {
 		if ( isLocked() ) {
 			return false; 
 		} else {
@@ -43,20 +43,20 @@ public class Lock {
 			
 	} 
 	
-	public ArrayList<String> getCellMates (){
+	public synchronized ArrayList<String> getCellMates (){
 		return cellMates;
 	}
 	
-	public int getCellMateCount ( ){ 
+	public synchronized int getCellMateCount ( ){ 
 		return cellMates.size() - 1;
 	}
 	
-	public String addCellMates(String name){
+	public synchronized String addCellMates(String name){
 		cellMates.add(name);
 		return "Sucessfully added";
 	}
 	
-	public String releaseLock() {
+	public synchronized String releaseLock() {
 		cellMates.clear();
 		warden = null;
 		return "Sucesfully released region";
