@@ -22,27 +22,42 @@ public class CommandManager implements CommandExecutor {
 		sender.sendMessage(ChatColor.valueOf("RED").toString().concat(message));
 	}
 	
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("getCurrentSelection")){
-			if (!(sender instanceof Player)) {
-				sendError(sender, "This command may only be invoked by a player");
-				return true;
-			} 
-			
-			if ( args.length > 0 ){
-				sendError(sender, "Incorrect number of arguments given (expected 0, given " + args.length + ")");
-				return true;
-			}
-				
-			WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-			Selection selection = worldEdit.getSelection((Player) sender);
-			sender.sendMessage("Max: " + selection.getMaximumPoint() + ", Min: " + selection.getMinimumPoint());
-			
-			
+	public boolean getCurrentSelection(CommandSender sender, String label, String[] args) {
+		if (!(sender instanceof Player)) {
+			sendError(sender, "This command may only be invoked by a player");
+			return true;
+		} 
+		
+		if ( args.length > 0 ){
+			sendError(sender, "Incorrect number of arguments given (expected 0, given " + args.length + ")");
 			return true;
 		}
 			
+		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+		Selection selection = worldEdit.getSelection((Player) sender);
+		sender.sendMessage("Max: " + selection.getMaximumPoint() + ", Min: " + selection.getMinimumPoint());
+		return true;
+	}
+	
+	public boolean cset(CommandSender sender, String label, String[] args){
+		StringBuilder sb = new StringBuilder();
+		for ( int i = 0 ; i < args.length ; i ++){
+			sb.append(args[i] +  " ");
+		}
+		sender.sendMessage(sb.toString());
+		return true;
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		
+		if (cmd.getName().equalsIgnoreCase("getCurrentSelection")){
+			return getCurrentSelection(sender,label,args);
+		} 
+		
+		if (cmd.getName().equalsIgnoreCase("cset")){
+			return cset(sender,label,args);
+		}
 		return false;
 	}
 	

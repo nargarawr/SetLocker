@@ -7,3 +7,8 @@ commands:
       usage: /<command>
       permission: SetLocker.getCurrentSelection
       permission-message: You don't have <permission>
+  cset:
+      description: Manipulation of sets
+      usage: /<command> new [name] 
+      permission: SetLocker.cset
+      permission-message: You don't have <permission>   
