@@ -27,23 +27,8 @@ public class SetLocker extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					"setlockersaves.xml"));
-
-			System.out.println("SetLocker data loaded sucessfully");
-		} catch (IOException e) {
-			System.out.println("No SetLocker data detected, creating now");
-			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter(
-						"setlockersaves.xml"));
-				out.close();
-				System.out.println("SetLocker data created sucessfully");
-			} catch (IOException e1) {
-				System.err.println("Error occured saving SetLocker data");
-			}
-		}
-
+		(new XMLManager(c)).load();
+		
 		getServer().getPluginManager().registerEvents(
 				new PlayerActionListener(this), this);
 
