@@ -24,9 +24,9 @@ public class PlayerActionListener implements Listener {
 					+ breach.getRegion().getName()
 					+ ". However, this region is locked and you are not permitted to enter";
 
-			event.getPlayer().sendMessage(
-					ChatColor.valueOf("RED").toString().concat(message));
-
+			//event.getPlayer().sendMessage(
+				//	ChatColor.valueOf("RED").toString().concat(message));
+			System.out.println("In " + breach.getRegion().getName());
 		} else {
 			System.out.println("out");
 		}

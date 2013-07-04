@@ -341,12 +341,13 @@ public class CommandManager implements CommandExecutor {
 		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
 				.getPluginManager().getPlugin("WorldEdit");
 		Selection selection = worldEdit.getSelection((Player) sender);
-				
+
 		if (selection != null) {
 			if (unique(name.toString())) {
 				Location max_point = selection.getMaximumPoint();
-				Location min_point = selection.getMaximumPoint();
-				RegionNamePair r = new RegionNamePair(name.toString(), min_point, max_point);
+				Location min_point = selection.getMinimumPoint();
+				RegionNamePair r = new RegionNamePair(name.toString(),
+						min_point, max_point);
 				Lock l = new Lock(r);
 				lockManager.addLock(l);
 
@@ -390,8 +391,8 @@ public class CommandManager implements CommandExecutor {
 
 	public Lock checkBreaches(Location location) {
 		for (Lock l : lockManager.getLocks()) {
-			Location min = l.getRegion().getMax_point();			
-			Location max = l.getRegion().getMin_point();
+			Location min = l.getRegion().getMin_point();
+			Location max = l.getRegion().getMax_point();
 			if (isInRegion(location, min, max)) {
 				return l;
 			}
@@ -401,12 +402,12 @@ public class CommandManager implements CommandExecutor {
 
 	public boolean isInRegion(Location player_location, Location region_min,
 			Location region_max) {
-		return ((player_location.getBlockX() <= region_max.getBlockX())
-				&& (player_location.getBlockX() >= region_min.getBlockX())
-				&& (player_location.getBlockZ() <= region_max.getBlockZ())
-				&& (player_location.getBlockZ() >= region_min.getBlockZ())
-				/*&& (player_location.getBlockY() <= region_max.getBlockY()) 
-				&& (player_location.getBlockY() >= region_min.getBlockY())*/);
+		return ((player_location.getX() <= region_max.getX() + 1)
+				&& (player_location.getX() >= region_min.getX() - 1)
+				&& (player_location.getZ() <= region_max.getZ() + 1)
+				&& (player_location.getZ() >= region_min.getZ() - 1)
+				&& (player_location.getY() <= region_max.getY() + 1) 
+				&& (player_location.getY() >= region_min.getY() - 1));
 	}
 
 	public void releaseOwnerships(String name) {
