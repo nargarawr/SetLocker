@@ -50,6 +50,15 @@ public class Lock {
 			
 	} 
 	
+	public boolean checkForCellMate (String name) {
+		for ( String s : cellMates ){
+			if ( s.equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public ArrayList<String> getCellMates (){
 		return cellMates;
 	}

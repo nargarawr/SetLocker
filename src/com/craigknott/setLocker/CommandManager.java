@@ -346,12 +346,16 @@ public class CommandManager implements CommandExecutor {
 			if (unique(name.toString())) {
 				Location max_point = selection.getMaximumPoint();
 				Location min_point = selection.getMinimumPoint();
-				RegionNamePair r = new RegionNamePair(name.toString(),
-						min_point, max_point);
-				Lock l = new Lock(r);
-				lockManager.addLock(l);
+				if ( checkBreaches(max_point) == null && checkBreaches(min_point) == null){
+					RegionNamePair r = new RegionNamePair(name.toString(),
+							min_point, max_point);
+					Lock l = new Lock(r);
+					lockManager.addLock(l);
 
-				sender.sendMessage("Added sucessfully");
+					sender.sendMessage("Added sucessfully");	
+				} else {
+					sendError(sender, "Regions may not overlap (+/- 1)");
+				}
 			} else {
 				sendError(sender, "That region name has been used already");
 			}
@@ -400,14 +404,14 @@ public class CommandManager implements CommandExecutor {
 		return null;
 	}
 
-	public boolean isInRegion(Location player_location, Location region_min,
+	public boolean isInRegion(Location foreignObject, Location region_min,
 			Location region_max) {
-		return ((player_location.getX() <= region_max.getX() + 1)
-				&& (player_location.getX() >= region_min.getX() - 1)
-				&& (player_location.getZ() <= region_max.getZ() + 1)
-				&& (player_location.getZ() >= region_min.getZ() - 1)
-				&& (player_location.getY() <= region_max.getY() + 1) 
-				&& (player_location.getY() >= region_min.getY() - 1));
+		return ((foreignObject.getX() <= region_max.getX() + 1)
+				&& (foreignObject.getX() >= region_min.getX() - 1)
+				&& (foreignObject.getZ() <= region_max.getZ() + 1)
+				&& (foreignObject.getZ() >= region_min.getZ() - 1)
+				&& (foreignObject.getY() <= region_max.getY() + 1) 
+				&& (foreignObject.getY() >= region_min.getY() - 1));
 	}
 
 	public void releaseOwnerships(String name) {

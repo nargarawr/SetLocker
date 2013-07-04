@@ -20,15 +20,18 @@ public class PlayerActionListener implements Listener {
 		Lock breach = plugin.getCommandManager().checkBreaches(
 				event.getPlayer().getLocation());
 		if (breach != null) {
-			String message = "You are attempting to enter region: "
-					+ breach.getRegion().getName()
-					+ ". However, this region is locked and you are not permitted to enter";
+			if (breach.isLocked()) {
+				if (!(breach.checkForCellMate(event.getPlayer().getName()))) {
+					String message = "You are attempting to enter region: "
+							+ breach.getRegion().getName()
+							+ ". However, this region is locked and you are not permitted to enter";
+					event.getPlayer()
+							.sendMessage(
+									ChatColor.valueOf("RED").toString()
+											.concat(message));
+				}
 
-			//event.getPlayer().sendMessage(
-				//	ChatColor.valueOf("RED").toString().concat(message));
-			System.out.println("In " + breach.getRegion().getName());
-		} else {
-			System.out.println("out");
+			}
 		}
 	}
 
