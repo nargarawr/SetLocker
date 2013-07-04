@@ -22,32 +22,21 @@ public class SetLocker extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		try {
-			BufferedWriter out = new BufferedWriter(new FileWriter(
-					"setlockersaves.txt"));
-			out.close();
-		} catch (IOException e) {
-			System.err.println("Error occured saving SetLocker data");
-		}
+		(new XMLManager(c)).save();
 	}
 
 	@Override
 	public void onEnable() {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
-					"setlockersaves.txt"));
+					"setlockersaves.xml"));
 
-			String line;
-			while ((line = in.readLine()) != null) {
-				System.out.println(line);
-			}
-			in.close();
 			System.out.println("SetLocker data loaded sucessfully");
 		} catch (IOException e) {
 			System.out.println("No SetLocker data detected, creating now");
 			try {
 				BufferedWriter out = new BufferedWriter(new FileWriter(
-						"setlockersaves.txt"));
+						"setlockersaves.xml"));
 				out.close();
 				System.out.println("SetLocker data created sucessfully");
 			} catch (IOException e1) {

@@ -40,9 +40,9 @@ SetLocker is a simple server plugin I was commissioned to create that allows for
 
 \section{\textbackslash lock [action] [p1] [p2]}
 \begin{itemize}
-\item \textbackslash lock createRegion [name] NULL (OP Only)\\
+\item \textbackslash lock createRegion [name] NULL (Require setManager permission)\\
 After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind a region to a specific name, [name], and grants it a lock.
-\item \textbackslash lock removeRegion [name] NULL (OP Only)\\
+\item \textbackslash lock removeRegion [name] NULL (Require setManager permission)\\
 Deletes the specified region
 \item \textbackslash lock acquire [region] NULL\\
 Acquires a lock on the region [region]. Can only be achieved if the region is not already locked

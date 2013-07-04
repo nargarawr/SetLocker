@@ -23,6 +23,10 @@ public class CommandManager implements CommandExecutor {
 		lockManager = new LockManager();
 	}
 
+	public LockManager getLockManager () {
+		return lockManager;
+	}
+	
 	public void sendError(CommandSender sender, String message) {
 		sender.sendMessage(ChatColor.valueOf("RED").toString().concat(message));
 	}
