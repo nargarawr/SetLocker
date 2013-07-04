@@ -1,0 +1,35 @@
+Specification
+
+
+it's basically WorldEdit's commands that allow certain people into a region
+You have Set X and Player Y and C want to film in it
+so if no one is using Set X, player Y can type
+/cset claim SetX and then only player Y has access to walk in and out of the set
+Player Y wants PLayer C's help so PLayer Y types /cset add PlayerC so then player C can now also walk in and out
+
+(Select regions like world edit and guard)
+(Separate to world guard regions (building, flags, etc)
+(if a player isn't apart of any set perhaps a warning message)
+
+/cset new <set name>
+      After selecting a region a staff member can            make that region a set
+
+/cset remove <set name>
+      Removes current standing set
+
+(Optional) /cset list
+       displays a list of all current sets
+
+/cset claim <set name>
+      A player can claim a set
+      (Turns on flag for walking in and out to the player that claimed the set)
+
+/cset add <player>
+      Adds a player to the current set (have to be already added to a set/claimed the set)
+
+/cset remove <player>
+      Removes a player from the current set
+(staff should be able to remove anyone from any set so like a cset.remove.other node? (maybe same for adding??) Also maybe staff do not have to be in a set to add/remove? Sudo command is a option if you can not do this)
+
+/cset leave
+       Players leaves a the current set (Maybe have a difference between claimer and member to a set? if claimer leaves, the set is discarded for anyone's use. if member leaves the set is still claimed by the claimer)
