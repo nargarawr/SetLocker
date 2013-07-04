@@ -67,6 +67,7 @@ public class CommandManager implements CommandExecutor {
 			break;
 		case ("acquire"):
 			acquireLock(sender,args[1]);
+			break;
 		case ("release"):
 			releaseLock(sender,args[1]);
 			break;
