@@ -18,26 +18,29 @@ public class CommandManager implements CommandExecutor {
 			this.plugin = plugin;
 	}
 
+	public void sendError(CommandSender sender, String message){
+		sender.sendMessage(ChatColor.valueOf("RED").toString().concat(message));
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("getCurrentSelection")){
-			if ( args.length > 0 ){
-				//sender.sendMessage(ChatColor.valueOf("red")"Too many arguments specified (received " + args.length + ", but expected 0");
-				sender.sendMessage(ChatColor.valueOf("RED").toString().concat("Test"));
-				return true;
-			}
-			sender.sendMessage("Success!");
-			return true;
-			/*
 			if (!(sender instanceof Player)) {
-				sender.sendMessage("Player only command");
-			} else {
-				WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-				Selection selection = worldEdit.getSelection((Player) sender);
-				sender.sendMessage("It works");
+				sendError(sender, "This command may only be invoked by a player");
+				return true;
+			} 
+			
+			if ( args.length > 0 ){
+				sendError(sender, "Incorrect number of arguments given (expected 0, given " + args.length + ")");
 				return true;
 			}
-			*/
+				
+			WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+			Selection selection = worldEdit.getSelection((Player) sender);
+			sender.sendMessage("Max: " + selection.getMaximumPoint() + ", Min: " + selection.getMinimumPoint());
+			
+			
+			return true;
 		}
 			
 		return false;
