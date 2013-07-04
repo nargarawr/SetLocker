@@ -149,8 +149,10 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if (l.getWarden().equals(((Player) sender).getName())) {
+			if (l.isLocked() && (l.getWarden().equals(((Player) sender).getName()))){
 				sender.sendMessage(l.addCellMates(player));
+			} else if (l.isLocked() && (!(l.getWarden().equals(((Player) sender).getName())))){
+				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
 			}
@@ -167,7 +169,7 @@ public class CommandManager implements CommandExecutor {
 		boolean notFound = true;
 
 		if (l != null) {
-			if (l.getWarden().equals(((Player) sender).getName())) {
+			if (l.isLocked() && (l.getWarden().equals(((Player) sender).getName()))){
 				for (String s : l.getCellMates()) {
 					if (s.equals(player)) {
 						l.removeCellMate(player);
@@ -179,6 +181,8 @@ public class CommandManager implements CommandExecutor {
 					sendError(sender,
 							"That player does not belong to this region");
 				}
+			} else if (l.isLocked() && (!(l.getWarden().equals(((Player) sender).getName())))){
+				sendError(sender, "You are not the owner of this region");
 			} else {
 				sendError(sender, "You are not the owner of this region");
 			}
