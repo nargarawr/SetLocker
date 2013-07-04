@@ -66,7 +66,9 @@ public class CommandManager implements CommandExecutor {
 			createRegion(sender, args[1]);
 			break;
 		case ("acquire"):
+			acquireLock(sender,args[1]);
 		case ("release"):
+			releaseLock(sender,args[1]);
 			break;
 		case ("list"):
 			lockList(sender);
@@ -80,19 +82,55 @@ public class CommandManager implements CommandExecutor {
 
 		return true;
 	}
+	
+	public boolean acquireLock ( CommandSender sender, String name ){
+		Lock l = lockManager.getLockByName(name);
+		
+		if ( l != null ){
+			sender.sendMessage(l.acquireLock(name));
+		}
+		return true;
+	}
+	
+	
+	public boolean releaseLock ( CommandSender sender, String name ){
+		Lock l = lockManager.getLockByName(name);
+		
+		if ( l != null ){
+			sender.sendMessage(l.releaseLock());
+		} else {
+			sendError(sender, "No such region exists");
+		}
+		
+		return true;
+	}
 
+	public boolean unique ( String name ) {
+		for ( Lock l : lockManager.getLocks() ){
+			if (l.getRegion().getName().equals(name)){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public boolean createRegion ( CommandSender sender, String name ) {
 		WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
 				.getPluginManager().getPlugin("WorldEdit");
 		Selection selection = worldEdit.getSelection((Player) sender);
 
 		if (selection != null) {
-			RegionNamePair r = new RegionNamePair(name.toString(),
-					selection);
-			Lock l = new Lock(r);
-			lockManager.addLock(l);
-			
-			sender.sendMessage("Added sucessfully");
+			if ( unique ( name.toString() ) ) {
+				RegionNamePair r = new RegionNamePair(name.toString(),
+						selection);
+				Lock l = new Lock(r);
+				lockManager.addLock(l);
+				
+				sender.sendMessage("Added sucessfully");	
+			} else {
+				sendError(sender, "That region name has been used already");
+			}
 		} else {
 			sendError(sender, "No selection has been made");
 		}

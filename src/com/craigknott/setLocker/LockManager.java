@@ -17,4 +17,13 @@ public class LockManager {
 	public ArrayList<Lock> getLocks(){
 		return locks;
 	}
+	
+	public Lock getLockByName(String name){
+		for ( Lock l : locks ){
+			if ( l.getRegion().getName().equals(name)){
+				return l; 
+			}
+		}
+		return null;
+	}
 }

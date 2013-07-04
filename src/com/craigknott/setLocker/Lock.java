@@ -7,11 +7,12 @@ import org.bukkit.entity.Player;
 public class Lock {
 
 	private RegionNamePair region;
-	private ArrayList<String> allowedPlayers;
+	private ArrayList<String> cellMates;
+	private String warden;
 
 	public Lock(RegionNamePair region) {
 		this.region = region;
-		allowedPlayers = new ArrayList<String>();
+		cellMates = new ArrayList<String>();
 	}
 
 	public RegionNamePair getRegion() {
@@ -19,15 +20,28 @@ public class Lock {
 	}
 
 	public boolean isLocked() {
-		return (allowedPlayers.size() > 0 );
+		return (cellMates.size() > 0 );
 	}
 
-	public void acquireLock(String name) {
-		allowedPlayers.add(name);
+	public String acquireLock(String name) {
+		if ( isLocked() ) {
+			return "This region is already locked and cannot be acquired"; 
+		} else {
+			warden = name;
+			cellMates.add(name);
+			return "Sucesfully locked region";
+		}
+			
+	} 
+	
+	public String addCellMates(String name){
+		return null;
 	}
-
-	public void releaseLock() {
-		allowedPlayers.clear();
+	
+	public String releaseLock() {
+		cellMates.clear();
+		warden = null;
+		return "Sucesfully released region";
 	}
 
 }
