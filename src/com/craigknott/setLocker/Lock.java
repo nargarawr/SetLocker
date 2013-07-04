@@ -2,8 +2,6 @@ package com.craigknott.setLocker;
 
 import java.util.ArrayList;
 
-import org.bukkit.entity.Player;
-
 public class Lock {
 
 	private RegionNamePair region;

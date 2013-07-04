@@ -1,5 +1,5 @@
 \documentclass[a4paper,twoside,notitlepage,11pt]{article}
-\usepackage[a4paper,hmargin=70pt,vmargin=75pt]{geometry}
+\usepackage[a4paper,hmargin=50pt,vmargin=75pt]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{amstext}
@@ -49,10 +49,17 @@ Releases the lock on the region [name]. Can only be achieved if the player is th
 \item \textbackslash lock list NULL NULL\\
 Lists all regions and their locked status. If locked, the owner of the locker will be identified.
 \item \textbackslash lock regionInfo [region] NULL\\
+Lists information on [region], including name, locked status, owner (if there is one) and crewmen (if there are any)
 \item \textbackslash lock addPlayer [region] [username]\\
+Adds a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock
 \item \textbackslash lock removePlayer [region] [username]\\
+Removes a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock
 \item \textbackslash lock leave [region] NULL\\
+Removes oneself from [region]. If the player is the owner of the lock, the lock will be released
 \item \textbackslash lock swapOwner [region] [new-owner]\\
+Swaps the owner of [region] to [new-owner]. The old owner loses all ownership privileges by doing this. Can only be achieved if the player is the owner of the lock
+\item \textbackslash lock about NULL NULL \\
+Display information about the plugin
 \end{itemize}
 
 \end{document}
