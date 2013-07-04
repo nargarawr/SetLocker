@@ -35,6 +35,10 @@ public class Lock {
 		return true;
 	}
 	
+	public String getCellMateByIndex(int i ){
+		return cellMates.get(i);
+	}
+	
 	public synchronized boolean acquireLock(String name) {
 		if ( isLocked() ) {
 			return false; 

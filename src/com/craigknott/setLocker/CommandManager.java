@@ -1,5 +1,7 @@
 package com.craigknott.setLocker;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -133,7 +135,7 @@ public class CommandManager implements CommandExecutor {
 		String message = "SetLocker was produced by Craig Knott (Nargarawr). \n" +
 				"If you encounter any bugs, please email me at psyck@nottingham.ac.uk.\n" +
 				"The source code is available at https://github.com/nargarawr/SetLocker\n" +
-				"Documentation available at https://github.com/nargarawr/SetLocker/blob/master/doc/SetLocker.pdf?raw=true";
+				"Documentation available at http://tinyurl.com/SetLockerPdf";
 		sender.sendMessage(ChatColor.valueOf("GOLD").toString().concat(message));
 	}
 
@@ -364,4 +366,26 @@ public class CommandManager implements CommandExecutor {
 		return false;
 	}
 
+	public String[] releaseOwnerships(String name){
+		for ( Lock l : lockManager.getLocks() ){
+			if ( l.getWarden().equals(name)) {
+				if ( l.getCellMateCount() == 0 ){
+					l.releaseLock();
+				} else {
+					String newOwner = name;
+					while ( newOwner.equals(name) ){
+						Random r = new Random();
+						int x = r.nextInt() % l.getCellMateCount() + 1; 
+						newOwner = l.getCellMateByIndex(x);
+					}
+					l.swapOwner(newOwner);
+				}
+			}
+			
+		}
+		
+		return null;
+		
+	}
+	
 }
