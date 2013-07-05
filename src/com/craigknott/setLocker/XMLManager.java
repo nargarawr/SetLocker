@@ -122,15 +122,15 @@ public class XMLManager {
 				for (int i = loopPoint; i < strings.size(); i++) {
 					String line = strings.get(i);
 					
-					if (line.matches("(\\s*)<\\/crewmates>")) {
+					if (line.matches("(\\s*)<\\/cellmates>")) {
 						crew = false;
 					}
 					
 					if ( crew ) {
-						cellMates.add(openTags(strings.get(i),"crewmate"));
+						cellMates.add(openTags(strings.get(i),"cellmate"));
 					}
 					
-					if (line.matches("(\\s*)<crewmates>")) {
+					if (line.matches("(\\s*)<cellmates>")) {
 						crew = true;
 					}
 					
