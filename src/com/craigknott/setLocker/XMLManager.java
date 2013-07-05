@@ -127,7 +127,11 @@ public class XMLManager {
 					}
 					
 					if ( crew ) {
-						cellMates.add(openTags(strings.get(i),"cellmate"));
+						String member = openTags(strings.get(i),"cellmate");
+						if (!(member.equals(warden))){
+							cellMates.add(member);
+						}
+						
 					}
 					
 					if (line.matches("(\\s*)<cellmates>")) {
