@@ -1,7 +1,7 @@
 name: SetLocker
 author: Craig Knott (Nargarawr)
 main: com.craigknott.setLocker.SetLocker
-version: 1
+version: 1.6.1
 commands:
    lock:
      description: Manage locks

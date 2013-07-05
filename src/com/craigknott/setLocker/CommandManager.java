@@ -243,7 +243,7 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	public void displayAbout(CommandSender sender) {
-		String message = "SetLocker was produced by Craig Knott (Nargarawr). \n"
+		String message = "SetLocker 1.6.1 was produced by Craig Knott (Nargarawr). \n"
 				+ "If you encounter any bugs, please email me at psyck@nottingham.ac.uk.\n"
 				+ "The source code is available at https://github.com/nargarawr/SetLocker\n"
 				+ "Documentation available at http://tinyurl.com/SetLockerPdf";
