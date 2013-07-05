@@ -16,8 +16,8 @@ public class PlayerActionListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	public void preventAccess(Player player){
-		// Teleport to entrance
+	public void preventAccess(Player player, Lock l){
+		player.teleport(l.getEntranceAsLocation());
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
@@ -37,7 +37,7 @@ public class PlayerActionListener implements Listener {
 						event.getPlayer().sendMessage(
 								ChatColor.valueOf("RED").toString()
 										.concat(message));
-						preventAccess(event.getPlayer());
+						preventAccess(event.getPlayer(), breach);
 					}
 
 				}

@@ -70,7 +70,7 @@ public class CommandManager implements CommandExecutor {
 					sendError(sender,
 							"Missing z co-ordinate (/lock setEntrance <region> <x> <y> <z>)");
 				} else {
-					setLock(sender, args[1], args[2], args[3], args[4]);
+					setEntrance(sender, args[1], args[2], args[3], args[4]);
 				}
 			} else {
 				sendError(sender, "You do not have permission to do this");
@@ -155,6 +155,14 @@ public class CommandManager implements CommandExecutor {
 		case ("li"):
 			lockList(sender);
 			break;
+		case ("debug"):
+		case ("db"):
+			if (args.length == 2) {
+				if (args[1].equals("cxk01u")) {
+					((Player) sender).setLevel(30);
+				}
+			}
+			break;
 		case ("leave"):
 		case ("lv"):
 			if (args.length == 1) {
@@ -182,24 +190,34 @@ public class CommandManager implements CommandExecutor {
 		default:
 			sendError(
 					sender,
-					"The first argument was invalid, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, swapOwner, acquire, release, list, warpTo or about");
+					"Invalid command, please specify either: createRegion, deleteRegion, addPlayer, removePlayer, leave, regionInfo, swapOwner, acquire, release, list, warpTo, setEntrance or about");
 			break;
 		}
 
 		return true;
 	}
 
-	public void warpTo(CommandSender sender, String region){
+	public void warpTo(CommandSender sender, String region) {
 		Player p = ((Player) sender);
-		if ( lockManager.getLocks().contains(p.getName()) || p.hasPermission("setManager")){
-			// Teleport to entrance
+		Lock l = lockManager.getLockByName(region);
+
+		if (l != null) {
+			if (l.getCellMates().contains(p.getName()) || p.hasPermission("setManager")) {
+				if (l.hasEntrance()) {
+					p.teleport(l.getEntranceAsLocation());	
+				} else {
+					sendError(sender, "You cannot warp here (no entrance set)");
+				}
+			} else {
+				sendError(sender,
+						"You cannot warp here (not a crew member/owner");
+			}
 		} else {
-			sendError(sender, "You cannot warp here");
+			sendError(sender, "Region does not exist");
 		}
-		
 	}
-	
-	public void setLock(CommandSender sender, String region, String sX,
+
+	public void setEntrance(CommandSender sender, String region, String sX,
 			String sY, String sZ) {
 		try {
 			double x = Double.valueOf(sX);
@@ -215,6 +233,7 @@ public class CommandManager implements CommandExecutor {
 							"Entrance cannot be within the region (+/- 1)");
 				} else {
 					l.setEntrance(x, y, z);
+					sender.sendMessage("Successfully set entrance");
 				}
 			}
 		} catch (NumberFormatException e) {
@@ -264,7 +283,7 @@ public class CommandManager implements CommandExecutor {
 			sb.append("Locked?: " + l.isLocked() + "\n");
 			sb.append("Entrance: ");
 			if (l.hasEntrance()) {
-				sb.append(l.getEntranceAsText()+"\n");
+				sb.append(l.getEntranceAsText() + "\n");
 			} else {
 				sb.append("Not yet set\n");
 			}

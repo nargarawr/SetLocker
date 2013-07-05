@@ -37,6 +37,15 @@ public class XMLManager {
 				out.write(" </cellmates>\n");
 				out.write(" <region>\n");
 				out.write("  <name>" + l.getRegion().getName() + "</name>\n");
+				if (l.hasEntrance()) {
+					out.write("  <entrance>\n");
+					out.write("   <x>" + l.getEntranceAsArray()[0] + "</x>\n");
+					out.write("   <y>" + l.getEntranceAsArray()[1] + "</y>\n");
+					out.write("   <z>" + l.getEntranceAsArray()[2] + "</z>\n");
+					out.write("  </entrance>\n");
+				} else {
+					out.write("  <no_entrance/>\n");
+				}
 				out.write("  <min_point>\n");
 				out.write("   <world>"
 						+ l.getRegion().getMin_point().getWorld()
@@ -75,12 +84,12 @@ public class XMLManager {
 		return splits[1];
 	}
 
-	public String getWorldName(String line){
+	public String getWorldName(String line) {
 		String[] split = line.split("name=|}");
 		return split[1];
 	}
-	
-	public void load() {	
+
+	public void load() {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
 					"setlockersaves.xml"));
@@ -102,42 +111,56 @@ public class XMLManager {
 			for (int j = 0; j < endCount; j++) {
 				String warden = "";
 				String name = "";
-				double min_x=0;
-				double min_y=0;
-				double min_z=0;
-				double max_x=0;
-				double max_y=0;
-				double max_z=0;
+				String worldName = "";
+				boolean hasEntrance = false;
+				double ent_x = 0;
+				double ent_y = 0;
+				double ent_z = 0;
+				double min_x = 0;
+				double min_y = 0;
+				double min_z = 0;
+				double max_x = 0;
+				double max_y = 0;
+				double max_z = 0;
 
 				ArrayList<String> cellMates = new ArrayList<String>();
 				RegionNamePair r;
 				Lock l;
 				boolean crew = false;
-				
+
 				for (int i = loopPoint; i < strings.size(); i++) {
 					String line = strings.get(i);
-					
+
 					if (line.matches("(\\s*)<\\/cellmates>")) {
 						crew = false;
 					}
-					
-					if ( crew ) {
-						String member = openTags(strings.get(i),"cellmate");
-						if (!(member.equals(warden))){
+
+					if (crew) {
+						String member = openTags(strings.get(i), "cellmate");
+						if (!(member.equals(warden))) {
 							cellMates.add(member);
 						}
-						
+
 					}
-					
+
 					if (line.matches("(\\s*)<cellmates>")) {
 						crew = true;
 					}
-					
+
 					if (line.matches("(\\s*)<warden>.*<\\/warden>")) {
 						warden = openTags(line, "warden");
 					} else if (line.matches("(\\s*)<name>.*<\\/name>")) {
 						name = openTags(line, "name");
+					} else if (line.matches("(\\s*)<entrance>")) {
+						ent_x = Double
+								.valueOf(openTags(strings.get(i + 1), "x"));
+						ent_y = Double
+								.valueOf(openTags(strings.get(i + 2), "y"));
+						ent_z = Double
+								.valueOf(openTags(strings.get(i + 3), "z"));
+						hasEntrance = true;
 					} else if (line.matches("(\\s*)<min_point>")) {
+						worldName = getWorldName(strings.get(i + 1));
 						min_x = Double
 								.valueOf(openTags(strings.get(i + 2), "x"));
 						min_y = Double
@@ -158,15 +181,18 @@ public class XMLManager {
 						break;
 					}
 				}
-				
-				World w = c.getPlugin().getServer().getWorld(getWorldName("CraftWorld{name=world}"));
-				
-				Location min_point = new Location( w, min_x,min_y,min_z );
-				Location max_point = new Location( w, max_x,max_y,max_z );
+
+				World w = c.getPlugin().getServer().getWorld(worldName);
+				Location min_point = new Location(w, min_x, min_y, min_z);
+				Location max_point = new Location(w, max_x, max_y, max_z);
 				r = new RegionNamePair(name, min_point, max_point);
-				l = new Lock ( r );
+				l = new Lock(r);
+				if (hasEntrance) {
+					l.setEntrance(ent_x, ent_y, ent_z);
+				}
+
 				l.acquireLock(warden);
-				for ( String s : cellMates ){
+				for (String s : cellMates) {
 					l.addCellMates(s);
 				}
 				c.getLockManager().addLock(l);

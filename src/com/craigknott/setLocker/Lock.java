@@ -2,6 +2,8 @@ package com.craigknott.setLocker;
 
 import java.util.ArrayList;
 
+import org.bukkit.Location;
+
 public class Lock {
 
 	private RegionNamePair region;
@@ -15,6 +17,14 @@ public class Lock {
 		this.region = region;
 		cellMates = new ArrayList<String>();
 	}
+
+	public double[] getEntranceAsArray(){
+		double[] d = new double[3];
+		d[0] = entranceLocation.getX();
+		d[1] = entranceLocation.getY();
+		d[2] = entranceLocation.getZ();
+		return d;
+	}
 	
 	public boolean hasEntrance (){
 		return entrance;
@@ -22,6 +32,11 @@ public class Lock {
 	
 	public String getEntranceAsText (){
 		return "(" + entranceLocation.getX() + ", " + entranceLocation.getY() + ", " + entranceLocation.getZ() + ")";
+	}
+	
+	public Location getEntranceAsLocation() throws NullPointerException{
+		Location loc = new Location(region.getMax_point().getWorld(), entranceLocation.getX(), entranceLocation.getY(), entranceLocation.getZ());
+		return loc;
 	}
 	
 	public void setEntrance (double x, double y, double z){
