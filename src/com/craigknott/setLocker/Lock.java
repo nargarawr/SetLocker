@@ -7,10 +7,26 @@ public class Lock {
 	private RegionNamePair region;
 	private ArrayList<String> cellMates;
 	private String warden;
+	private OneBlockLocation entranceLocation;
+	private boolean entrance;
 
 	public Lock(RegionNamePair region) {
+		entrance = false;
 		this.region = region;
 		cellMates = new ArrayList<String>();
+	}
+	
+	public boolean hasEntrance (){
+		return entrance;
+	}
+	
+	public String getEntranceAsText (){
+		return "(" + entranceLocation.getX() + ", " + entranceLocation.getY() + ", " + entranceLocation.getZ() + ")";
+	}
+	
+	public void setEntrance (double x, double y, double z){
+		entranceLocation = new OneBlockLocation(x,y,z);
+		entrance = true;
 	}
 
 	public RegionNamePair getRegion() {

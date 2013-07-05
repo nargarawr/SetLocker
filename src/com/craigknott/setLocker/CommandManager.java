@@ -45,12 +45,37 @@ public class CommandManager implements CommandExecutor {
 		}
 
 		switch (args[0]) {
+		case ("warpTo"):
+		case ("wt"):
+			break;
+		case ("setEntrance"):
+		case ("se"):
+			if (((Player) sender).hasPermission("setManager")) {
+				if (args.length == 1) {
+					sendError(sender,
+							"Missing region argument (/lock setEntrance <region> <x> <y> <z>)");
+				} else if (args.length == 2) {
+					sendError(sender,
+							"Missing x co-ordinate (/lock setEntrance <region> <x> <y> <z>)");
+				} else if (args.length == 3) {
+					sendError(sender,
+							"Missing y co-ordinate (/lock setEntrance <region> <x> <y> <z>)");
+				} else if (args.length == 4) {
+					sendError(sender,
+							"Missing z co-ordinate (/lock setEntrance <region> <x> <y> <z>)");
+				} else {
+					setLock(sender, args[1], args[2], args[3], args[4]);
+				}
+			} else {
+				sendError(sender, "You do not have permission to do this");
+			}
+			break;
 		case ("createRegion"):
 		case ("cr"):
 			if (((Player) sender).hasPermission("setManager")) {
 				if (args.length == 1) {
 					sendError(sender,
-							"Missing region argument (/lock createRegion <name>)");
+							"Missing region argument (/lock createRegion <region>)");
 				} else {
 					createRegion(sender, args[1]);
 				}
@@ -60,6 +85,7 @@ public class CommandManager implements CommandExecutor {
 			break;
 		case ("deleteRegion"):
 		case ("dr"):
+		case ("rm"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock deleteRegion <region>)");
@@ -157,6 +183,30 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
+	public void setLock(CommandSender sender, String region, String sX,
+			String sY, String sZ) {
+		try {
+			double x = Double.valueOf(sX);
+			double y = Double.valueOf(sY);
+			double z = Double.valueOf(sZ);
+
+			Lock l = lockManager.getLockByName(region);
+			if (l != null) {
+				Location loc = new Location(null, x, y, z);
+				if (isInRegion(loc, l.getRegion().getMin_point(), l.getRegion()
+						.getMax_point())) {
+					sendError(sender,
+							"Entrance cannot be within the region (+/- 1)");
+				} else {
+					l.setEntrance(x, y, z);
+				}
+			}
+		} catch (NumberFormatException e) {
+			sendError(sender,
+					"Entrance co-ordinates must consist of three numbers");
+		}
+	}
+
 	public void displayAbout(CommandSender sender) {
 		String message = "SetLocker was produced by Craig Knott (Nargarawr). \n"
 				+ "If you encounter any bugs, please email me at psyck@nottingham.ac.uk.\n"
@@ -196,6 +246,12 @@ public class CommandManager implements CommandExecutor {
 			StringBuilder sb = new StringBuilder();
 			sb.append("\nRegion: " + name + "\n");
 			sb.append("Locked?: " + l.isLocked() + "\n");
+			sb.append("Entrance: ");
+			if (l.hasEntrance()) {
+				sb.append(l.getEntranceAsText());
+			} else {
+				sb.append("Not yet set");
+			}
 			sb.append("Location:\n");
 			sb.append("(" + l.getRegion().getMax_point().getX() + ", ");
 			sb.append(l.getRegion().getMax_point().getY() + ", ");
@@ -321,12 +377,16 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if (l.acquireLock(((Player) sender).getName())) {
-				sender.sendMessage("Successfully Locked");
+			if (l.hasEntrance()) {
+				if (l.acquireLock(((Player) sender).getName())) {
+					sender.sendMessage("Successfully Locked");
+				} else {
+					sendError(sender, "Region already locked");
+				}
 			} else {
-				sendError(sender, "Region already locked");
+				sendError(sender,
+						"This region does not have an entrance and cannot be acquired");
 			}
-
 		} else {
 			sendError(sender, "This region does not exist");
 		}
@@ -387,7 +447,7 @@ public class CommandManager implements CommandExecutor {
 					Lock l = new Lock(r);
 					lockManager.addLock(l);
 
-					sender.sendMessage("Added Successfully");
+					sender.sendMessage("Added Successfully\n Please now set a location for the region entrance");
 				} else {
 					sendError(sender, "Regions may not overlap (+/- 1)");
 				}
