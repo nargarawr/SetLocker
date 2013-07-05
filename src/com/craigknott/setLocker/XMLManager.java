@@ -85,17 +85,7 @@ public class XMLManager {
 		return split[1];
 	}
 	
-	public void load() {
-		World w = c.getPlugin().getServer().getWorld(getWorldName("CraftWorld{name=world}"));
-				
-		Location min_point = new Location( w, 20,78,248 );
-		Location max_point = new Location( w, 20,78,248 );
-		RegionNamePair r = new RegionNamePair("test", min_point, max_point);
-		Lock l = new Lock ( r );
-		l.acquireLock("Nargarawr");
-		c.getLockManager().addLock(l);
-		
-		/*
+	public void load() {	
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
 					"setlockersaves.xml"));
@@ -109,7 +99,7 @@ public class XMLManager {
 			int loopPoint = 0;
 
 			for (int i = 0; i < strings.size(); i++) {
-				if (strings.get(i).equals("</lock>\n")) {
+				if (strings.get(i).equals("</lock>")) {
 					endCount++;
 				}
 			}
@@ -127,9 +117,23 @@ public class XMLManager {
 				ArrayList<String> cellMates = new ArrayList<String>();
 				RegionNamePair r;
 				Lock l;
-
+				boolean crew = false;
+				
 				for (int i = loopPoint; i < strings.size(); i++) {
 					String line = strings.get(i);
+					
+					if (line.matches("(\\s*)<\\/crewmates>")) {
+						crew = false;
+					}
+					
+					if ( crew ) {
+						cellMates.add(openTags(strings.get(i),"crewmate"));
+					}
+					
+					if (line.matches("(\\s*)<crewmates>")) {
+						crew = true;
+					}
+					
 					if (line.matches("(\\s*)<warden>.*<\\/warden>")) {
 						warden = openTags(line, "warden");
 					} else if (line.matches("(\\s*)<name>.*<\\/name>")) {
@@ -150,22 +154,22 @@ public class XMLManager {
 								.valueOf(openTags(strings.get(i + 4), "z"));
 					}
 
-					if (strings.get(i).equals("</lock>\n")) {
+					if (strings.get(i).equals("</lock>")) {
 						loopPoint = i + 1;
+						break;
 					}
 				}
 				
+				World w = c.getPlugin().getServer().getWorld(getWorldName("CraftWorld{name=world}"));
 				
-				World w = c.getPlugin().getServer().getWorld(new UUID(0, 0));
-				
-				WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer()
-						.getPluginManager().getPlugin("WorldEdit");
-
 				Location min_point = new Location( w, min_x,min_y,min_z );
 				Location max_point = new Location( w, max_x,max_y,max_z );
 				r = new RegionNamePair(name, min_point, max_point);
 				l = new Lock ( r );
-				l.swapOwner(warden);
+				l.acquireLock(warden);
+				for ( String s : cellMates ){
+					l.addCellMates(s);
+				}
 				c.getLockManager().addLock(l);
 			}
 
@@ -183,8 +187,7 @@ public class XMLManager {
 				System.err
 						.println("[SetLocker] Error creating setlockersaves.xml");
 			}
-		}*/
-		save();
+		}
 	}
 
 }

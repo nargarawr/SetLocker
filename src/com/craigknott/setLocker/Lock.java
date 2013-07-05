@@ -39,7 +39,7 @@ public class Lock {
 	}
 	
 	public synchronized boolean acquireLock(String name) {
-		if ( isLocked() ) {
+		if ( isLocked() || name.equals("N/A")) {
 			return false; 
 		} else {
 			warden = name;
@@ -67,6 +67,9 @@ public class Lock {
 	}
 	
 	public synchronized String addCellMates(String name){
+		if ( name.equals("N/A") ){
+			return null;
+		}
 		cellMates.add(name);
 		return "Sucessfully added";
 	}

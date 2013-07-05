@@ -4,18 +4,38 @@
   <cellmate>Nargarawr</cellmate>
  </cellmates>
  <region>
-  <name>test</name>
+  <name>Pink</name>
   <min_point>
    <world>CraftWorld{name=world}</world>
-   <x>20.0</x>
+   <x>27.0</x>
    <y>78.0</y>
-   <z>248.0</z>
+   <z>250.0</z>
   </min_point>
   <max_point>
    <world>CraftWorld{name=world}</world>
-   <x>20.0</x>
+   <x>27.0</x>
    <y>78.0</y>
-   <z>248.0</z>
+   <z>250.0</z>
+  </max_point>
+ </region>
+</lock>
+<lock>
+ <warden>N/A</warden>
+ <cellmates>
+ </cellmates>
+ <region>
+  <name>Blue</name>
+  <min_point>
+   <world>CraftWorld{name=world}</world>
+   <x>21.0</x>
+   <y>78.0</y>
+   <z>250.0</z>
+  </min_point>
+  <max_point>
+   <world>CraftWorld{name=world}</world>
+   <x>21.0</x>
+   <y>78.0</y>
+   <z>250.0</z>
   </max_point>
  </region>
 </lock>
