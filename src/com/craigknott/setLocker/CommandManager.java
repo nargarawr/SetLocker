@@ -175,7 +175,7 @@ public class CommandManager implements CommandExecutor {
 							.getName())) || ((Player) sender)
 							.hasPermission("setManager"))) {
 				l.setOwner(newOwner);
-				sender.sendMessage("Swap successful");
+				sender.sendMessage("Swap Successful");
 			} else if (l.isLocked()
 					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
 							.getName())))) {
@@ -264,9 +264,9 @@ public class CommandManager implements CommandExecutor {
 						l.removeCellMate(player);
 						if (player.equalsIgnoreCase(l.getWarden())) {
 							l.releaseLock();
-							sender.sendMessage("successfully removed, and lock released");
+							sender.sendMessage("Successfully removed, and lock released");
 						} else {
-							sender.sendMessage("successfully removed");
+							sender.sendMessage("Successfully removed");
 						}
 						return true;
 					}
@@ -300,9 +300,9 @@ public class CommandManager implements CommandExecutor {
 					if (((Player) sender).getName().equalsIgnoreCase(
 							l.getWarden())) {
 						l.releaseLock();
-						sender.sendMessage("successfully left, lock released");
+						sender.sendMessage("Successfully left, lock released");
 					} else {
-						sender.sendMessage("successfully left");
+						sender.sendMessage("Successfully left");
 					}
 					return true;
 				}
@@ -322,7 +322,7 @@ public class CommandManager implements CommandExecutor {
 
 		if (l != null) {
 			if (l.acquireLock(((Player) sender).getName())) {
-				sender.sendMessage("successfully Locked");
+				sender.sendMessage("Successfully Locked");
 			} else {
 				sendError(sender, "Region already locked");
 			}
@@ -345,7 +345,7 @@ public class CommandManager implements CommandExecutor {
 						"You are not the holder of this lock, and cannot release it");
 			}
 		} else {
-			sendError(sender, "No such region exists");
+			sendError(sender, "No Such region exists");
 		}
 
 		return true;
@@ -387,7 +387,7 @@ public class CommandManager implements CommandExecutor {
 					Lock l = new Lock(r);
 					lockManager.addLock(l);
 
-					sender.sendMessage("Added successfully");
+					sender.sendMessage("Added Successfully");
 				} else {
 					sendError(sender, "Regions may not overlap (+/- 1)");
 				}
