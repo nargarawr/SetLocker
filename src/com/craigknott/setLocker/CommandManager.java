@@ -1,7 +1,5 @@
 package com.craigknott.setLocker;
 
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -48,6 +46,7 @@ public class CommandManager implements CommandExecutor {
 
 		switch (args[0]) {
 		case ("createRegion"):
+		case ("cr"):
 			if (((Player) sender).hasPermission("setManager")) {
 				if (args.length == 1) {
 					sendError(sender,
@@ -60,6 +59,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("deleteRegion"):
+		case ("dr"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock deleteRegion <region>)");
@@ -68,6 +68,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("acquire"):
+		case ("ac"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock acquire <region>)");
@@ -75,7 +76,9 @@ public class CommandManager implements CommandExecutor {
 				acquireLock(sender, args[1]);
 			}
 			break;
+
 		case ("release"):
+		case ("rl"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock release <region>)");
@@ -84,6 +87,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("regionInfo"):
+		case ("ri"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock regionInfo <region>)");
@@ -92,6 +96,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("addPlayer"):
+		case ("ap"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock addPlayer <region> <username>)");
@@ -103,6 +108,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("removePlayer"):
+		case ("rp"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock removePlayer <region> <username>)");
@@ -114,9 +120,11 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("list"):
+		case ("li"):
 			lockList(sender);
 			break;
 		case ("leave"):
+		case ("lv"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock leave <region>)");
@@ -125,6 +133,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			break;
 		case ("swapOwner"):
+		case ("so"):
 			if (args.length == 1) {
 				sendError(sender,
 						"Missing region argument (/lock swapOwner <region> <new-owner>)");
@@ -162,9 +171,11 @@ public class CommandManager implements CommandExecutor {
 
 		if (l != null) {
 			if (l.isLocked()
-					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
-							.getName()))) {
+					&& ((l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName())) || ((Player) sender)
+							.hasPermission("setManager"))) {
 				l.setOwner(newOwner);
+				sender.sendMessage("Swap successful");
 			} else if (l.isLocked()
 					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
 							.getName())))) {
@@ -220,8 +231,9 @@ public class CommandManager implements CommandExecutor {
 
 		if (l != null) {
 			if (l.isLocked()
-					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
-							.getName()))) {
+					&& ((l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName())) || ((Player) sender)
+							.hasPermission("setManager"))) {
 				sender.sendMessage(l.addCellMates(player));
 			} else if (l.isLocked()
 					&& (!(l.getWarden().equalsIgnoreCase(((Player) sender)
@@ -244,16 +256,17 @@ public class CommandManager implements CommandExecutor {
 
 		if (l != null) {
 			if (l.isLocked()
-					&& (l.getWarden().equalsIgnoreCase(((Player) sender)
-							.getName()))) {
+					&& ((l.getWarden().equalsIgnoreCase(((Player) sender)
+							.getName())) || ((Player) sender)
+							.hasPermission("setManager"))) {
 				for (String s : l.getCellMates()) {
 					if (s.equalsIgnoreCase(player)) {
 						l.removeCellMate(player);
 						if (player.equalsIgnoreCase(l.getWarden())) {
 							l.releaseLock();
-							sender.sendMessage("Sucessfully removed, and lock released");
+							sender.sendMessage("successfully removed, and lock released");
 						} else {
-							sender.sendMessage("Sucessfully removed");
+							sender.sendMessage("successfully removed");
 						}
 						return true;
 					}
@@ -287,9 +300,9 @@ public class CommandManager implements CommandExecutor {
 					if (((Player) sender).getName().equalsIgnoreCase(
 							l.getWarden())) {
 						l.releaseLock();
-						sender.sendMessage("Sucessfully left, lock released");
+						sender.sendMessage("successfully left, lock released");
 					} else {
-						sender.sendMessage("Sucessfully left");
+						sender.sendMessage("successfully left");
 					}
 					return true;
 				}
@@ -308,11 +321,14 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			l.acquireLock(((Player) sender).getName());
-			sender.sendMessage("Sucessfully Locked");
+			if (l.acquireLock(((Player) sender).getName())) {
+				sender.sendMessage("successfully Locked");
+			} else {
+				sendError(sender, "Region already locked");
+			}
+
 		} else {
-			sendError(sender,
-					"This region is already locked and cannot be acquired");
+			sendError(sender, "This region does not exist");
 		}
 		return true;
 	}
@@ -321,7 +337,8 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if ((l.getWarden().equalsIgnoreCase(((Player) sender).getName()))) {
+			if ((l.getWarden().equalsIgnoreCase(((Player) sender).getName()))
+					|| ((Player) sender).hasPermission("setManager")) {
 				sender.sendMessage(l.releaseLock());
 			} else {
 				sendError(sender,
@@ -370,7 +387,7 @@ public class CommandManager implements CommandExecutor {
 					Lock l = new Lock(r);
 					lockManager.addLock(l);
 
-					sender.sendMessage("Added sucessfully");
+					sender.sendMessage("Added successfully");
 				} else {
 					sendError(sender, "Regions may not overlap (+/- 1)");
 				}
@@ -455,8 +472,6 @@ public class CommandManager implements CommandExecutor {
 					}
 				}
 			}
-
 		}
 	}
-
 }

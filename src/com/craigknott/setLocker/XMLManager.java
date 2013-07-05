@@ -6,14 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.Selection;
 
 public class XMLManager {
 
@@ -176,7 +171,7 @@ public class XMLManager {
 				}
 				c.getLockManager().addLock(l);
 			}
-
+			in.close();
 			System.out
 					.println("[SetLocker] Sucessfully loaded setlockersaves.xml");
 		} catch (IOException e) {

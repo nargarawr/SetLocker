@@ -20,8 +20,9 @@
  </region>
 </lock>
 <lock>
- <warden>N/A</warden>
+ <warden>Truenash</warden>
  <cellmates>
+  <cellmate>Truenash</cellmate>
  </cellmates>
  <region>
   <name>Blue</name>
@@ -36,6 +37,28 @@
    <x>21.0</x>
    <y>78.0</y>
    <z>250.0</z>
+  </max_point>
+ </region>
+</lock>
+<lock>
+ <warden>Truenash</warden>
+ <cellmates>
+  <cellmate>Truenash</cellmate>
+  <cellmate>Nargarawr</cellmate>
+ </cellmates>
+ <region>
+  <name>blueOff</name>
+  <min_point>
+   <world>CraftWorld{name=world}</world>
+   <x>23.0</x>
+   <y>78.0</y>
+   <z>246.0</z>
+  </min_point>
+  <max_point>
+   <world>CraftWorld{name=world}</world>
+   <x>23.0</x>
+   <y>78.0</y>
+   <z>246.0</z>
   </max_point>
  </region>
 </lock>

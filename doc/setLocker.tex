@@ -40,26 +40,26 @@ SetLocker is a simple server plugin I was commissioned to create that allows for
 
 \section{\textbackslash lock [action] [p1] [p2]}
 \begin{itemize}
-\item \textbackslash lock createRegion [name] NULL (Require setManager permission)\\
+\item \textbackslash lock createRegion [name] NULL or \textbackslash lock cr [name] NULL (Requires setManager permission)\\
 After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind a region to a specific name, [name], and grants it a lock.
-\item \textbackslash lock removeRegion [name] NULL (Require setManager permission)\\
+\item \textbackslash lock deleteRegion [name] NULL or \textbackslash lock dr [name] NULL (Requires setManager permission)\\
 Deletes the specified region
-\item \textbackslash lock acquire [region] NULL\\
+\item \textbackslash lock acquire [region] NULL or \textbackslash lock ac [region] NULL\\
 Acquires a lock on the region [region]. Can only be achieved if the region is not already locked
-\item \textbackslash lock release [region] NULL\\
-Releases the lock on the region [region]. Can only be achieved if the player is the owner of the lock
-\item \textbackslash lock list NULL NULL\\
+\item \textbackslash lock release [region] NULL or \textbackslash lock rl [region] NULL\\
+Releases the lock on the region [region]. Can only be achieved if the player is the owner of the lock (or has setManager permission)
+\item \textbackslash lock list NULL NULL or \textbackslash lock li NULL NULL\\
 Lists all regions and their locked status. If locked, the owner of the locker will be identified.
-\item \textbackslash lock regionInfo [region] NULL\\
+\item \textbackslash lock regionInfo [region] NULL or \textbackslash lock ri [region] NULL \\
 Lists information on [region], including name, locked status, owner (if there is one) and crewmen (if there are any)
-\item \textbackslash lock addPlayer [region] [username]\\
-Adds a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock
-\item \textbackslash lock removePlayer [region] [username]\\
-Removes a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock
-\item \textbackslash lock leave [region] NULL\\
+\item \textbackslash lock addPlayer [region] [username] or \textbackslash lock ap [region] [username]\\
+Adds a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock (or has setManager permission)
+\item \textbackslash lock removePlayer [region] [username] or \textbackslash lock rp [region] [username]\\
+Removes a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock (or has setManager permission)
+\item \textbackslash lock leave [region] NULL or \textbackslash lock lv [region] NULL\\
 Removes oneself from [region]. If the player is the owner of the lock, the lock will be released
-\item \textbackslash lock swapOwner [region] [new-owner]\\
-Swaps the owner of [region] to [new-owner]. The old owner loses all ownership privileges by doing this. Can only be achieved if the player is the owner of the lock
+\item \textbackslash lock swapOwner [region] [new-owner] or \textbackslash lock so [region] [new-owner]\\
+Swaps the owner of [region] to [new-owner]. The old owner loses all ownership privileges by doing this. Can only be achieved if the player is the owner of the lock (or has setManager permission)
 \item \textbackslash lock about NULL NULL \\
 Display information about the plugin
 \end{itemize}
