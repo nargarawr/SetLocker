@@ -1,33 +1,52 @@
 \documentclass[a4paper,twoside,notitlepage,11pt]{article}
-\usepackage[a4paper,hmargin=50pt,vmargin=50pt]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{amstext}
+\usepackage{tabularx}
 \usepackage{amssymb}
 \usepackage{fancyhdr}
+\usepackage{multirow}
 \usepackage{tocloft}
+\usepackage{lscape}
+\usepackage{subcaption}
+\usepackage{rotating}
 \usepackage{titletoc}
-\usepackage[explicit]{titlesec}
+\usepackage{setspace}
+\usepackage[all]{xy}
 \usepackage{nccmath}
-\usepackage{tikz}
-\usepackage{tikz-qtree}
-\usetikzlibrary{automata}
+\usepackage[a4paper,hmargin=50pt,vmargin=75pt]{geometry}
 \usepackage[hypcap]{caption}
-\usepackage{cancel}
+\usepackage{qtree}
 \usepackage{cleveref}
 \usepackage{listings}
 \usepackage{float}
-\usepackage{latexsym}
-\usepackage{enumerate}
+\usepackage[compact]{titlesec}
+\usepackage{layouts}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{color}
 
 
-\newcommand{\paperTitle}{SetLocker}
+\newcommand{\paperTitle}{setLocker Documentation}
 \newcommand{\nin}{\noindent}
+
+\setlength{\parskip}{0.25em}
 
 \renewcommand{\headrulewidth}{0.0pt}
 
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyhead[LO]{Craig Knott}
+	\fancyhead[CO]{\textit{\paperTitle}}
+	\fancyhead[RO]{\thepage}
+	\fancyhead[LE]{\thepage}
+	\fancyhead[CE]{\textit{\paperTitle}}
+	\fancyhead[RE]{Craig Knott}
+}
+
 \begin{document}
 
+\pagestyle{empty}
 \begin{center}
    \textbf{SetLocker\ \\Minecraft Server Plugin} \ \\
    By Craig Knott (Nargarawr) \ \\
@@ -38,30 +57,125 @@
 \nin
 SetLocker is a simple server plugin I was commissioned to create that allows for exclusivity within regions in Minecraft. The purpose of this plug in is to rent out public spaces to members of a server, through the use of ``locking'' and ``unlocking'' the region. Once a region is locked, only the person that acquired the lock may enter it. The owner of the locker can, however, add ``crewmen'', players whom can then also access the region. The player can, at any time, pass on ownership of the region to another crewman. Once the player is finished with the region, they may release the lock so other parties can access the region (this will happen automatically if they disconnect from the server, although ownership will pass to another online crewman, if possible). Below is a list of the commands of the plugin, how to use them, and what they do.
 
-\section{\textbackslash lock [action] [p1] [p2]}
-\begin{itemize}
-\item \textbackslash lock createRegion [name] NULL or \textbackslash lock cr [name] NULL (Requires setManager permission)\\
-After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind a region to a specific name, [name], and grants it a lock.
-\item \textbackslash lock deleteRegion [name] NULL or \textbackslash lock dr [name] NULL (Requires setManager permission)\\
-Deletes the specified region
-\item \textbackslash lock acquire [region] NULL or \textbackslash lock ac [region] NULL\\
-Acquires a lock on the region [region]. Can only be achieved if the region is not already locked
-\item \textbackslash lock release [region] NULL or \textbackslash lock rl [region] NULL\\
-Releases the lock on the region [region]. Can only be achieved if the player is the owner of the lock (or has setManager permission)
-\item \textbackslash lock list NULL NULL or \textbackslash lock li NULL NULL\\
-Lists all regions and their locked status. If locked, the owner of the locker will be identified.
-\item \textbackslash lock regionInfo [region] NULL or \textbackslash lock ri [region] NULL \\
-Lists information on [region], including name, locked status, owner (if there is one) and crewmen (if there are any)
-\item \textbackslash lock addPlayer [region] [username] or \textbackslash lock ap [region] [username]\\
-Adds a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock (or has setManager permission)
-\item \textbackslash lock removePlayer [region] [username] or \textbackslash lock rp [region] [username]\\
-Removes a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock (or has setManager permission)
-\item \textbackslash lock leave [region] NULL or \textbackslash lock lv [region] NULL\\
-Removes oneself from [region]. If the player is the owner of the lock, the lock will be released
-\item \textbackslash lock swapOwner [region] [new-owner] or \textbackslash lock so [region] [new-owner]\\
-Swaps the owner of [region] to [new-owner]. The old owner loses all ownership privileges by doing this. Can only be achieved if the player is the owner of the lock (or has setManager permission)
-\item \textbackslash lock about NULL NULL \\
-Display information about the plugin
-\end{itemize}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock createRegion}} \\ \hline
+Usage       & \textbackslash lock createRegion [name] \\ \hline
+Alternative & \textbackslash lock cr [name] \\ \hline
+Permissions & setManager \\ \hline
+Details 	& After selecting a region with \textbackslash\textbackslash pos1 and \textbackslash\textbackslash pos2, this command is used to bind a region to a specific name, [name], and grants it lock-ability. \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock deleteRegion}} \\ \hline
+Usage       & \textbackslash lock deleteRegion [name] \\ \hline
+Alternative & \textbackslash lock dr [name] \\ \hline
+Permissions & setManager \\ \hline
+Details 	& Deletes the specified region \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock acquire}} \\ \hline
+Usage       & \textbackslash lock acquire [region] \\ \hline
+Alternative & \textbackslash lock ac [region] \\ \hline
+Permissions & None \\ \hline
+Details 	& Acquires a lock on the region [region]. Can only be achieved if the region is not already locked \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock release}} \\ \hline
+Usage       & \textbackslash lock release [region] \\ \hline
+Alternative & \textbackslash lock rl [region] \\ \hline
+Permissions & Optional: setManager \\ \hline
+Details 	& Releases the lock on the region [region]. Can only be achieved if the player is the owner of the lock or has setManager permission \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock list}} \\ \hline
+Usage       & \textbackslash lock list \\ \hline
+Alternative & \textbackslash lock li \\ \hline
+Permissions & None \\ \hline
+Details 	& Lists all regions and their locked status. If locked, the owner of the lock will be displayed. \\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+\pagestyle{plain}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock regionInfo}} \\ \hline
+Usage       & \textbackslash lock regionInfo [region] \\ \hline
+Alternative & \textbackslash lock ri [region] \\ \hline
+Permissions & None \\ \hline
+Details 	& Lists information on [region], including name, locked status, location, owner (if there is one) and crewmen (if there are any) \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock removePlayer}} \\ \hline
+Usage       & \textbackslash lock removePlayer [region] [username] \\ \hline
+Alternative & \textbackslash lock rp [region] [username]\\ \hline
+Permissions & Optional: setManager \\ \hline
+Details 	& Removes a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock or has setManager permission \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock addPlayer}} \\ \hline
+Usage       & \textbackslash lock addPlayer [region] [username \\ \hline
+Alternative & \textbackslash lock ap [region] [username\\ \hline
+Permissions & Optional: setManager \\ \hline
+Details 	& Adds a player, [username] to the crew of [region]. Can only be achieved if the player is the owner of the lock or has setManager permission \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock leave}} \\ \hline
+Usage       & \textbackslash lock leave [region] \\ \hline
+Alternative & \textbackslash lock lv [region] \\ \hline
+Permissions & None \\ \hline
+Details 	& Removes oneself from [region]. If the player is the owner of the lock, the lock will be released \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock swapOwner}} \\ \hline
+Usage       & \textbackslash lock swapOwner [region] [new-owner] \\ \hline
+Alternative & \textbackslash lock so [region] [new-owner]\\ \hline
+Permissions & Optional: setManager \\ \hline
+Details 	& Swaps the owner of [region] to [new-owner]. The old owner loses all ownership privileges by doing this. Can only be achieved if the player is the owner of the lock, or has setManager permission \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock about}} \\ \hline
+Usage       & \textbackslash lock about \\ \hline
+Alternative & None \\ \hline
+Permissions & None \\ \hline
+Details 	& Display information about the plugin \\ \hline
+\end{tabular}
+\end{center}
 
 \end{document}
+
+
+
+
+
+
+
+
+	
