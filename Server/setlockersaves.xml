@@ -7,15 +7,15 @@
   <name>Pink</name>
   <min_point>
    <world>CraftWorld{name=world}</world>
-   <x>26.0</x>
-   <y>79.0</y>
-   <z>255.0</z>
+   <x>25.0</x>
+   <y>77.0</y>
+   <z>248.0</z>
   </min_point>
   <max_point>
    <world>CraftWorld{name=world}</world>
-   <x>26.0</x>
+   <x>28.0</x>
    <y>79.0</y>
-   <z>255.0</z>
+   <z>251.0</z>
   </max_point>
  </region>
 </lock>

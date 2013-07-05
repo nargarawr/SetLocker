@@ -17,7 +17,7 @@ public class PlayerActionListener implements Listener {
 	}
 
 	public void preventAccess(Player player){
-		player.kickPlayer("testing");
+		// Teleport to entrance
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)

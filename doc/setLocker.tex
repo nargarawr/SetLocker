@@ -45,7 +45,7 @@
 
 \begin{document}
 
-\pagestyle{empty}
+
 \begin{center}
    \textbf{SetLocker\ \\Minecraft Server Plugin} \ \\
    By Craig Knott (Nargarawr) \ \\
@@ -56,6 +56,13 @@
 \nin
 SetLocker is a simple server plugin I was commissioned to create that allows for exclusivity within regions in Minecraft. The purpose of this plug in is to rent out public spaces to members of a server, through the use of ``locking'' and ``unlocking'' the region. Once a region is locked, only the person that acquired the lock may enter it. The owner of the locker can, however, add ``crewmen'', players whom can then also access the region. The player can, at any time, pass on ownership of the region to another crewman. Once the player is finished with the region, they may release the lock so other parties can access the region (this will happen automatically if they disconnect from the server, although ownership will pass to another online crewman, if possible). Below is a list of the commands of the plugin, how to use them, and what they do.
 
+\tableofcontents
+
+\newpage
+\pagestyle{plain}
+
+\section{Commands}
+\subsection{createRegion, cr}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock createRegion}} \\ \hline
@@ -66,6 +73,7 @@ Details 	& After selecting a region with \textbackslash\textbackslash pos1 and \
 \end{tabular}
 \end{center}
 
+\subsection{deleteRegion, dr, rm}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock deleteRegion}} \\ \hline
@@ -76,6 +84,7 @@ Details 	& Deletes the specified region \\ \hline
 \end{tabular}
 \end{center}
 
+\subsection{setEntrance, se}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock setEntrance}} \\ \hline
@@ -86,6 +95,7 @@ Details 	& Sets the entrance location for this region to ([x],[y],[z]), required
 \end{tabular}
 \end{center}
 
+\subsection{acquire, ac}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock acquire}} \\ \hline
@@ -96,8 +106,7 @@ Details 	& Acquires a lock on the region [region]. Can only be achieved if the r
 \end{tabular}
 \end{center}
 
-\newpage
-\pagestyle{plain}
+\subsection{release, rl}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock release}} \\ \hline
@@ -108,9 +117,10 @@ Details 	& Releases the lock on the region [region]. Can only be achieved if the
 \end{tabular}
 \end{center}
 
+\subsection{warpTo, wt}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
-\multicolumn{2}{|c|}{\textbf{\textbackslash lock warpTo (NOT YET IMPLEMENTED)}} \\ \hline
+\multicolumn{2}{|c|}{\textbf{\textbackslash lock warpTo}} \\ \hline
 Usage       & \textbackslash lock warpTo [region] \\ \hline
 Alternative & \textbackslash lock wt [region] \\ \hline
 Permissions & Optional: setManager \\ \hline
@@ -118,6 +128,7 @@ Details 	& Teleports the player to the entrance of the specified region, provide
 \end{tabular}
 \end{center}
 
+\subsection{list, li}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock list}} \\ \hline
@@ -128,6 +139,7 @@ Details 	& Lists all regions and their locked status. If locked, the owner of th
 \end{tabular}
 \end{center}
 
+\subsection{regionInfo ri}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock regionInfo}} \\ \hline
@@ -138,6 +150,7 @@ Details 	& Lists information on [region], including name, locked status, entranc
 \end{tabular}
 \end{center}
 
+\subsection{removePlayer, rp}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock removePlayer}} \\ \hline
@@ -148,6 +161,7 @@ Details 	& Removes a player, [username] to the crew of [region]. Can only be ach
 \end{tabular}
 \end{center}
 
+\subsection{addPlayer, ap}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock addPlayer}} \\ \hline
@@ -158,6 +172,7 @@ Details 	& Adds a player, [username] to the crew of [region]. Can only be achiev
 \end{tabular}
 \end{center}
 
+\subsection{leave, lv}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock leave}} \\ \hline
@@ -168,6 +183,7 @@ Details 	& Removes oneself from [region]. If the player is the owner of the lock
 \end{tabular}
 \end{center}
 
+\subsection{swapOwner, so}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock swapOwner}} \\ \hline
@@ -178,6 +194,7 @@ Details 	& Swaps the owner of [region] to [new-owner]. The old owner loses all o
 \end{tabular}
 \end{center}
 
+\subsection{about}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{12.5cm}|} \hline
 \multicolumn{2}{|c|}{\textbf{\textbackslash lock about}} \\ \hline

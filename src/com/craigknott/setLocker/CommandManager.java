@@ -47,6 +47,12 @@ public class CommandManager implements CommandExecutor {
 		switch (args[0]) {
 		case ("warpTo"):
 		case ("wt"):
+			if (args.length == 1) {
+				sendError(sender,
+						"Missing region argument (/lock warpTo <region>)");
+			} else {
+				warpTo(sender, args[1]);
+			}
 			break;
 		case ("setEntrance"):
 		case ("se"):
@@ -183,6 +189,16 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
+	public void warpTo(CommandSender sender, String region){
+		Player p = ((Player) sender);
+		if ( lockManager.getLocks().contains(p.getName()) || p.hasPermission("setManager")){
+			// Teleport to entrance
+		} else {
+			sendError(sender, "You cannot warp here");
+		}
+		
+	}
+	
 	public void setLock(CommandSender sender, String region, String sX,
 			String sY, String sZ) {
 		try {
@@ -248,9 +264,9 @@ public class CommandManager implements CommandExecutor {
 			sb.append("Locked?: " + l.isLocked() + "\n");
 			sb.append("Entrance: ");
 			if (l.hasEntrance()) {
-				sb.append(l.getEntranceAsText());
+				sb.append(l.getEntranceAsText()+"\n");
 			} else {
-				sb.append("Not yet set");
+				sb.append("Not yet set\n");
 			}
 			sb.append("Location:\n");
 			sb.append("(" + l.getRegion().getMax_point().getX() + ", ");
