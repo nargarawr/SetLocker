@@ -411,10 +411,12 @@ public class CommandManager implements CommandExecutor {
 
 	public boolean isWarden(CommandSender sender) {
 		String username = ((Player) sender).getName();
-		
-		for ( Lock l : lockManager.getLocks() ) {
-			if (l.getWarden().equals(username)){
-				return true;
+
+		for (Lock l : lockManager.getLocks()) {
+			if (l.isLocked()) {
+				if (l.getWarden().equals(username)) {
+					return true;
+				}
 			}
 		}
 		return false;
