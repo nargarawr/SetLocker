@@ -202,9 +202,10 @@ public class CommandManager implements CommandExecutor {
 		Lock l = lockManager.getLockByName(region);
 
 		if (l != null) {
-			if (l.getCellMates().contains(p.getName()) || p.hasPermission("setManager")) {
+			if (l.getCellMates().contains(p.getName())
+					|| p.hasPermission("setManager")) {
 				if (l.hasEntrance()) {
-					p.teleport(l.getEntranceAsLocation());	
+					p.teleport(l.getEntranceAsLocation());
 				} else {
 					sendError(sender, "You cannot warp here (no entrance set)");
 				}
@@ -408,19 +409,35 @@ public class CommandManager implements CommandExecutor {
 		return true;
 	}
 
+	public boolean isWarden(CommandSender sender) {
+		String username = ((Player) sender).getName();
+		
+		for ( Lock l : lockManager.getLocks() ) {
+			if (l.getWarden().equals(username)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public synchronized boolean acquireLock(CommandSender sender, String name) {
 		Lock l = lockManager.getLockByName(name);
 
 		if (l != null) {
-			if (l.hasEntrance()) {
-				if (l.acquireLock(((Player) sender).getName())) {
-					sender.sendMessage("Successfully Locked");
-				} else {
-					sendError(sender, "Region already locked");
-				}
-			} else {
+			if (isWarden(sender)) {
 				sendError(sender,
-						"This region does not have an entrance and cannot be acquired");
+						"You already own a region, you cannot lock more than one");
+			} else {
+				if (l.hasEntrance()) {
+					if (l.acquireLock(((Player) sender).getName())) {
+						sender.sendMessage("Successfully Locked");
+					} else {
+						sendError(sender, "Region already locked");
+					}
+				} else {
+					sendError(sender,
+							"This region does not have an entrance and cannot be acquired");
+				}
 			}
 		} else {
 			sendError(sender, "This region does not exist");
